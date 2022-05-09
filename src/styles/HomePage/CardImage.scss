@@ -1,0 +1,137 @@
+
+.warpper{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,
+    minmax(12rem, 16rem));
+    column-gap: 20px;
+    gap:4rem;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+}
+
+
+/* .card_a{
+    
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 15px lightblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    flex-wrap: nowrap;
+    transition: transform 200ms ease-in;
+
+
+        img{
+            width: 257px;
+            height: 250px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .block-ellipsis {
+            display: block;
+            display: -webkit-box;
+            max-width: 100%;
+            margin: 0 auto;
+            font-size: 14px;
+            line-height: 1;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background-color: #fff;
+        }
+} */
+
+
+.card_a {
+    /* Add shadows to create the "card" effect */
+    width: 300px;
+    box-shadow: 0 4px 8px 0 lightblue;
+    transition: 0.3s;
+    min-height: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    img{
+        width: 255px;
+        height: 270px;
+        border-radius: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: -20px;
+        box-shadow: 0 0 5px 4px #fff;
+    }
+    .container{
+        padding: 10px;
+
+        p{
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 25px;
+            -webkit-line-clamp: 3;
+            height: 75px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+        }
+    }
+  }
+
+  /* On mouse-over, add a deeper shadow */
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+/* Mobile: width < 740px */
+@media only screen and (max-width: 739px){
+    .card_a {
+        /* Add shadows to create the "card" effect */
+        width: 300px;
+        box-shadow: 0 4px 8px 0 lightblue;
+        transition: 0.3s;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        img{
+            width: 255px;
+            height: 250px;
+        }
+        .container{
+            padding: 10px;
+    
+            p{
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 25px;
+                -webkit-line-clamp: 3;
+                height: 75px;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+            }
+        }
+      }
+      .warpper{
+        display: grid;
+        grid-template-columns: repeat(auto-fit,
+        minmax(12rem, 18.5rem));
+        column-gap: 20px;
+        gap:4rem;
+        justify-content: center;
+        font-family: 'Barlow Condensed', sans-serif;
+    }
+      
+}
+/* Table: width >= 740px and width < 1024px */
+@media only screen and (min-width: 740px) and (max-width: 63.9375em){
+    .warpper{
+        grid-template-columns: repeat(auto-fit,
+        minmax(12rem, 18rem));
+        column-gap: 50px;
+    }
+}
+/* PC: width >= 1024px */
+@media only screen and (min-width: 64em) {
+  
+}

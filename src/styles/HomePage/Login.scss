@@ -1,0 +1,402 @@
+.body-login {
+    margin: 0;
+    padding: 0;
+    background-image: url(../../assets/Images/login-register.jpg);
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+}
+
+.form-login {
+    width: 400px;
+    height: 420px;
+    color: #333;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    padding: 50px 60px;
+    transform: translate(-50%, -50%);
+    box-shadow: 8px 8px 50px;
+}
+
+.form-login input {
+    display: flex;
+    width: 280px;
+    height: 35px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.btn-login {
+    width: 280px;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+a {
+    text-decoration: none !important;
+    font-family: 'Dancing Script', cursive;
+    font-size: 20px;
+    color: black;
+}
+
+.or {
+    text-align: center !important;
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    width: 40px;
+    border-radius: 50%;
+    margin-left: 45%;
+    margin-top: 5%;
+}
+
+.fa-facebook {
+    font-size: 3rem;
+    color: #0032d1;
+    margin-left: 10%;
+    cursor: pointer;
+}
+
+.fa-google-plus {
+    font-size: 3rem;
+    color: #e31305;
+    float: right;
+    margin-right: 10%;
+    cursor: pointer;
+}
+
+.btn.btn-danger.save{
+    width: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table-chinhSua{
+    display: none;
+    position:fixed;
+    top:0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+
+    .chinhSua{
+        position: relative;
+        top:28%;
+        width: 700px;
+        height: auto;
+        background-color: #141529;
+        margin: auto;
+        border-radius: 20px;
+        padding: 20px;
+        font-family: cursive;
+
+        .close-icon{
+            position: absolute;
+            left: 95%;
+            bottom: 95%;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .close-icon:hover{
+            transform: scale(1.5);
+            box-shadow: 0 0 10px 2px lightblue;
+            border-radius: 20px;
+        }
+
+        .form-information{
+            display: flex;
+            flex-direction: column;
+            align-content: space-between;
+            height: 100%;
+            input{
+                margin: 10px 0px;
+                width: 100%;
+                border: 2px solid #323048;
+                border-radius: 20px;
+                background-color: #141529;
+                color: white;
+                padding: 0px 10px;
+                height: 40px;
+            }
+        }
+
+        button.btn.btn-danger{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 150px;
+            margin-top: 20px;
+            border-radius: 20px;
+        }
+        
+    }
+}
+
+.tab-pane{
+    .table-custom{  
+        div.btn.btn-danger.addition{
+            position: relative;
+            left: 43%;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            width: 100px;
+        }
+    }
+
+    .table-job{
+        width: 1100px;
+        height: auto;
+        box-shadow: 0 0 10px 3px lightblue;
+        background-color: #fdfdfd;
+        display: block;
+        margin-top: 40px;
+        margin-left: auto;
+        margin-right: auto;
+        color: #f8fbff;
+        padding: 15px;
+
+        .wrapper-button-job{
+            position: relative;
+            display: flex;
+            align-items: center ;
+            justify-content: center;
+            margin-bottom: 20px;
+            margin-left: 10px;
+            .button-job{
+                border: 2px solid black;
+                border-radius: 10px;
+                margin-right: 20px;
+                margin-top: 10px;
+                padding: 5px;
+                color: #fff;
+                font-weight: 300;
+                background-color: #151426;
+                box-shadow: 0 0 10px 5px rgb(74, 104, 87);
+                cursor: pointer;
+            }
+            .button-job:hover{
+                color: #f8fbff;
+                font-weight: 300;
+                box-shadow: 0 0 10px 5px #c23564;
+            }
+        }
+
+        .wrapper-tablejob {
+            margin-bottom: 20px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 40px;
+            overflow-x: auto;
+            
+            .tablejob-1{
+                display: block;
+                width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .tablejob-2{
+                display: none;
+                width: 1500px;
+            }
+
+        }
+        
+    }
+
+    .history-job{
+        width: 1100px;
+        height: auto;
+        box-shadow: 0 0 10px 3px lightblue;
+        background-color: #fdfdfd;
+        display: block;
+        margin-top: 40px;
+        margin-left: auto;
+        margin-right: auto;
+        color: #f8fbff;
+        padding: 30px;
+        overflow-x: auto;
+
+        .history-table{
+            width: 1600px;
+        }
+    }
+}
+table tbody tr:hover{
+   box-shadow: 0 0 10px 2px black;
+}
+
+.icon-accept{
+    font-size: 20px;
+    color:aqua;
+    margin-left: 20px;
+    cursor: pointer;
+    background-color: #323048;
+    
+}
+.icon-add{
+    font-size: 20px;
+    color:cyan;
+    background-color: #323048;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.icon-delete{
+    font-size: 20px;
+    color: #e63946;
+    background-color: #323048;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.icon-edit{
+    font-size: 20px;
+    color: #ffc6ff;
+    background-color: #323048;
+    cursor: pointer;
+}
+.icon-see{
+    font-size: 20px;
+    color: #70e000;
+    margin-left: 8px;
+    background-color: #323048;
+    cursor: pointer;
+}
+.icon-accept:hover{
+    transform: scale(1.4);
+
+}
+.icon-add:hover{
+    transform: scale(1.4);
+
+}
+.icon-delete:hover{
+    transform: scale(1.4);
+
+}
+.icon-edit:hover{
+    transform: scale(1.4);
+
+}
+.icon-refuse:hover{
+    transform: scale(1.4);
+}
+.icon-see:hover{
+    transform: scale(1.4);
+}
+.container-add-job{
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+    display: none;
+
+    .wrapper-add-job{
+        position: relative;
+        top:30%;
+        left:43%;
+        width: 300px;
+        height: 400px;
+        background-color: #141529;
+        box-shadow: 0 0 10px 5px #c23564;
+        color: #f8fbff;
+
+        .add-job{
+            display: grid;
+            grid-template-columns: auto auto;
+            grid-template-rows: auto;
+            height: 100%;
+            justify-content: center;
+            font-size: 18px;
+            
+            div{
+                text-align: center;
+                margin: 0 10px;
+                padding: 5px;
+                div{
+                    border: 2px solid #c23564;
+                    border-radius: 10px;
+                    
+                    cursor: pointer;
+                }
+                div:hover{
+                    background-color: #fdfdfd;
+                    color: #151426;
+                    border: 2px solid black;
+                    box-shadow: 0 0 10px 2px lightblue;
+                }
+            }
+        }
+
+        .icon{
+            margin-left: 91%;
+            margin-top: 3%;
+            margin-bottom: 5%;
+            font-size: 18px;
+            box-shadow: 0 0 10px 2px lightblue;
+            border-radius: 10px;
+            background-color: white;
+            color: black; 
+            cursor: pointer;
+        }
+
+        .icon:hover{
+            transform: scale(1.3);
+            color: red
+        }
+        
+    }
+}
+
+
+
+
+@media only screen and (max-width: 739px){
+    .tabs{
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        margin-left: -6%;
+    }
+    .tab-content{
+        .tab-pane{
+            .table-custom{
+                .btn.btn-danger.addition{
+                    margin-left: -9%;
+                }
+            }
+            .row{
+                div.col-md-12{
+                    padding: 0rem !important;
+                    .review-form{
+                        .area-review{
+                            width: 286px;
+                        }
+                    }
+                }
+            }
+
+            .table-job{
+                width: 350px;
+                margin-left: -10.4%;
+
+                .wrapper-button-job{
+                    font-size: 14px;
+                    .button-job{
+                        margin-right: 15px;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+    .container-add-job{
+        .wrapper-add-job{
+            left:10%;
+            top:17%;
+
+        }
+    }
+}

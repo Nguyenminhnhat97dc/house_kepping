@@ -1,0 +1,114 @@
+/* Add a black background color to the top navigation */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500&display=swap');.topnav {
+    background-color: #333 ;
+    overflow: hidden;
+  }
+$color-a-nav: #61DAFB;
+
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .topnav a.login{
+    float:right;
+    margin-right: 30px;
+  }
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: $color-a-nav;
+    color: black;
+    border-radius: 10px;
+  }
+  
+  /* Add a color to the active/current link */
+/*   .topnav a.active {
+    background-color: $color-a-nav;
+    color: #333;
+    border-radius: 10px;
+  } */
+
+  /* The dropdown container */
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: 'Barlow Condensed', sans-serif;;
+  margin: 0; 
+}
+
+.topnav a:hover, .dropdown:hover .dropbtn {
+  background-color: $color-a-nav;
+  color: black;
+  border-radius: 10px;
+}
+
+
+.dropdown-content {
+  display: none;
+  background-color: lightblue;
+  position: absolute;
+  left: 8%;
+  top: 5.8%;
+  z-index: 1000;
+  width: 180px;
+  height: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+  .abcxyz{
+    display:flex;
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  float: none;
+  color: #fff;
+  padding: 12px 16px;
+  display: block;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.drop:hover .dropdown-content{
+  display: block;
+  
+}
+
+.login{
+  float:right;
+}
+
+/* Mobile: width < 740px */
+@media only screen and (max-width: 46.1875em){
+
+}
+/* Table: width >= 740px and width < 1024px */
+@media only screen and (min-width: 740px) and (max-width: 63.9375em){
+
+}
+/* PC: width >= 1024px */
+@media only screen and (min-width: 64em) {
+
+}
