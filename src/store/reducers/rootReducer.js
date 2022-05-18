@@ -1,14 +1,14 @@
-const initState ={
-    users:[
-        { id: 1, name: 'Eric' },
-        { id: 2, name: 'HoiDanIt'}
-    ]
-}
+import * as Types from "../../constants/ActionType";
+var initState = []
 
 const rootReducer = (state = initState, action) => {
+    switch(action.type){
+        case Types.FETCH_PROVIDER:
+            state = {...action.providers}
+            return state 
 
-    return state;
-
+        default: return state
+    }
 }
 
 export default rootReducer;

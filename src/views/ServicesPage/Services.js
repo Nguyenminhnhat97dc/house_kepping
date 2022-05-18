@@ -88,7 +88,7 @@ class Services extends Component {
                   <div className="selected" key={index}> {item}</div>
                 )
               }) :
-              <div> Vui lòng chọn dịch vụ </div>  
+              <h2 style={ {color: "black"} }> Vui lòng chọn dịch vụ </h2>  
           }
           </div>
           <div className="row mt-5">

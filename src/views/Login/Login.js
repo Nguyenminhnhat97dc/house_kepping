@@ -3,7 +3,13 @@ import { NavLink } from "react-router-dom";
 import "../../styles/HomePage/Login.scss"
 import { BsFacebook } from "react-icons/bs"
 import { AiFillGoogleCircle } from "react-icons/ai"
+import callApi from "../../utils/apiCaller";
+import StaffLogin from "./StaffLogin";
+//import {actFetchProvider} from "../../store/actions/index"
+import { connect } from "react-redux";
+
 class Login extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -18,20 +24,36 @@ class Login extends React.Component {
               user : "",
               password: "",
           },
-          link: ""
+          Profile :[],
+          isloggin : false
         }
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleLoggin = this.handleLoggin.bind(this);
         this.handleChangeValueUser = this.handleChangeValueUser.bind(this)
         this.handleChangeValuePassword = this.handleChangeValuePassword.bind(this)
       }
 
-    handleSubmit(event) {
-        if (this.state.typeUserInDataBase.length > 0 ) {
-            this.state.typeUserInDataBase[0].type === "staff" ? localStorage.setItem("links" , "staffInformation") : localStorage.setItem("links", "customerInformation")
-        } else {
-            alert(" Sai tài khoản hoặc mật khẩu ") 
-        }
-
+    handleLoggin() {
+       callApi('loggin', 'POST', this.state.typeUserCurrent).then(res =>{
+           console.log(res.data)
+            if(res.data.result !== "False") {
+                this.setState({
+                    ...[this.state],
+                    isloggin : true
+                })
+                //this.props.fetchProvider(res.data)
+                console.log(">>>>>>>ID",res.data.result.ProviderID)
+                localStorage.setItem("ProviderID", res.data.result.ProviderID)
+                localStorage.setItem("loggin","true")
+            }else {
+                alert('Sai tài khoản hoặc mật khẩu')
+            }
+        }).catch(err => alert(err))
+    }
+    handleLogOut = () => {
+        this.setState({
+            ...[this.state],
+            isloggin : false
+        })
     }
     handleChangeValueUser(event) {
         this.setState({ 
@@ -52,25 +74,44 @@ class Login extends React.Component {
          })
     }
     render() {
-        console.log(">>>>>Link",this.state.link)
+        console.log(">>>checkProps",this.props.provider)
         return (
+            <>
+            {this.state.isloggin || localStorage.getItem("loggin")?
+            <StaffLogin isloggin = {this.state.isloggin} handleLogOut={this.handleLogOut}/>:
             <div className="body-login">
-                <form className="form-login" >
+                <form className="form-login">
                     <h2 className="text-center py-3">Đăng Nhập</h2>
-                    <input type="text" placeholder="Địa Chỉ Email" value={this.state.typeUserCurrent.user}  onChange={ (event) =>this.handleChangeValueUser(event) }/>
+                    <input className="false" type="text" placeholder="Địa Chỉ Email" value={this.state.typeUserCurrent.user}  onChange={ (event) =>this.handleChangeValueUser(event) }/>
                     <input type="password" placeholder="Mật khẩu" value={this.state.typeUserCurrent.password} onChange={ this.handleChangeValuePassword }/>
                     <div>
                         <NavLink  to="">Quên Mật khẩu</NavLink>
                         <NavLink  to="" style={ { float:"right"} } className="float-right">Đăng ký</NavLink>
                     </div>
-                    <NavLink type="button" to="/checkLogin" className="btn btn-danger btn-login" onClick={ this.handleSubmit } >Đăng Nhập</NavLink>
+                    <button type="button" to="/checkLogin" className="btn btn-danger btn-login" onClick={ this.handleLoggin}>Đăng Nhập</button>
                     <div className="or"><i>Or</i></div>
                     <span> <BsFacebook  className="fa-facebook"/> </span>
                     <span> <AiFillGoogleCircle  className="fa-google-plus"/></span>
                 </form>
             </div>
+            }
+            </>
         )
     }
 }
 
-export default Login
+const mapStateToProps = (state) => {
+    return {
+      provider : state.user
+    }
+  }
+
+/* const mapDispatchToProps = (dispatch, props) => {
+    return {
+        fetchProvider : (providers) => {
+           dispatch(actFetchProvider(providers))
+        }
+    }
+} */
+
+export default connect(mapStateToProps,null)(Login)

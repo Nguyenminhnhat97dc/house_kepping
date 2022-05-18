@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import  SliderData  from "./SliderData";
 import '../../styles/HomePage/Slideshow.scss'
 import {FaArrowAltCircleRight, FaArrowAltCircleLeft} from 'react-icons/fa'
@@ -43,4 +43,4 @@ class Slideshow extends React.Component {
     }
 }
 
-export default Slideshow
+export default Slideshow */
