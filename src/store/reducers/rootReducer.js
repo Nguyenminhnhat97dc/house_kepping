@@ -6,7 +6,12 @@ const rootReducer = (state = initState, action) => {
         case Types.FETCH_PROVIDER:
             state = {...action.providers}
             return state 
-
+        case Types.FETCH_REQUIREMENTCUSTOMER:
+            state = {...action.requirementCustomer}
+            return state
+        case Types.FETCH_SERVICES:
+            state = {...state, services : action.services}
+            return state
         default: return state
     }
 }

@@ -184,38 +184,7 @@ class Calendar extends React.Component {
         </div>
       );
     }
-
-     // Activeclass current Day
-
-     const dayActives = document.querySelectorAll(".dayy")
-     const currentMonth = document.querySelector(".month")
-     const currentYear = document.querySelector(".year")
-     const current = new Date();
-     const date = current.getDate();
-     const month = current.getMonth() + 1 ;
-     const year = current.getFullYear();
-     const removeActive = document.querySelector(".dayy.active")
-     dayActives.forEach((dayActive) => {
-       
-       dayActive.onclick = () => {
-         alert(dayActive.innerHTML)
-       }
-       if (dayActive.innerText === date.toString() &&
-             currentMonth.innerText.slice(6) === month.toString() &&
-               year.toString() === currentYear.innerText
-       ){
-           dayActive.className += " active";
-       } 
-       if( dayActive.innerText !== date.toString() &&
-            currentMonth.innerText.slice(6) !== month.toString() &&           
-            removeActive !== null 
-            ){
-                removeActive.classList.remove("active")
-
-       }
-     });
- 
-     // End ActiveClass currentDay
+    
 
     return (
       <div className="calendar-wrapper">

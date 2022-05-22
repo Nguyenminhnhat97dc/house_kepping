@@ -1,7 +1,7 @@
 import { Component, React } from "react";
 import { connect } from "react-redux";
 import "../../styles/Servicespage/All.scss";
-import DataServices from "../../assets/Data/Services";
+//import DataServices from "../../assets/Data/Services";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BiCalendar } from "react-icons/bi"
@@ -11,35 +11,57 @@ import { AiOutlineCloseCircle } from "react-icons/ai"
 //import { NavLink } from "react-router-dom";
 import Nav from "../../Components/Header/Nav";
 import Calendar from "../../Components/Calendar/Calendar ";
+import callApi from "../../utils/apiCaller";
 class Services extends Component {
   constructor(props){
     super(props);
     this.state = {
       tooglebutton : 'true',
-      listjob: []
+      ListServices :[],
+      informationCustomer:{
+        nameCustomer : "",
+        addressCustomer : "",
+        phoneCustomer : "",
+        listjob: [],
+        dayStart : "",
+        timeStart : ""
+      }
     }
+    this.handleOnClickAddRequirement = this.handleOnClickAddRequirement.bind(this)
+    this.notifySuccess = this.notifySuccess.bind(this)
+    this.notifyFail = this.notifyFail.bind(this)
   }
     
     handleOnclickSelect = (event) =>{
       var count = 0
-      for ( var i = 0 ; i< this.state.listjob.length; i++) {
-        if( this.state.listjob[i]  === event.target.textContent) {
+      for ( var i = 0 ; i< this.state.informationCustomer.listjob.length; i++) {
+        if( this.state.informationCustomer.listjob[i]  === event.target.textContent) {
           count ++
           event.target.className = "select"
         } 
       }
       console.log(count)
       if(count === 0 ){
-        this.setState({ ...[this.props], listjob: [...this.state.listjob, event.target.textContent] })
+        this.setState({ ...[this.state],
+          informationCustomer :{
+            ...this.state.informationCustomer,
+            listjob: [...this.state.informationCustomer.listjob, event.target.textContent]
+          }
+          })
         event.target.className += " active"
       } else {
-        let currentListjob = this.state.listjob
+        let currentListjob = this.state.informationCustomer.listjob
         currentListjob = currentListjob.filter( item => item !== event.target.textContent);
         console.log(">>>>",currentListjob)
-        this.setState({ ...[this.props], listjob: currentListjob})
+        //this.setState({ ...[this.state], listjob: currentListjob})
+        this.setState({ ...[this.state],
+          informationCustomer :{
+            ...this.state.informationCustomer,
+            listjob: currentListjob
+          }
+          })
       }
-      
-      console.log(event.target.className)
+    
     }
 
     handleOnclickDelete = () => {
@@ -65,40 +87,152 @@ class Services extends Component {
       document.getElementById("calendar").style.display = "none"
     }
 
-  render() {
-    const notify = () => toast("Wow so easy!", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
+    handleOnChangeInformation = (event) =>{
+      const value = event.target.value
+      this.setState({
+        ...this.state,
+        informationCustomer:{
+          ...this.state.informationCustomer,
+          [event.target.name] : value
+        }
+      })
+    }
 
+    handleOnClickAddRequirement = () =>{
+      if(this.state.informationCustomer.listjob.length > 0 && this.state.informationCustomer.addessCustomer != "" && this.state.informationCustomer.dayStart !=""
+      && this.state.informationCustomer.nameCustomer !="" && this.state.informationCustomer.phoneCustomer !="" && this.state.informationCustomer.timeStart !=""){
+        let nameServices = this.state.informationCustomer.listjob
+        let dayStart = this.state.informationCustomer.dayStart
+        let services = ""
+        for ( var i = 0; i< nameServices.length; i++){
+          services = services + ", " + nameServices[i]
+        }
+        let daystart = ""
+        for ( var i = 0; i< dayStart.length; i++){
+          daystart = daystart + ", " + dayStart[i]
+        }
+        callApi("requirement","POST",{
+        Name : this.state.informationCustomer.nameCustomer,
+        Address : this.state.informationCustomer.addressCustomer,
+        Phone : this.state.informationCustomer.phoneCustomer,
+        NameServices : services.slice(2),
+        DayStart  : daystart.slice(2),
+        TimeStart : this.state.informationCustomer.timeStart
+        }).then(res =>{
+          this.notifySuccess()
+        })
+      }else{
+        this.notifyFail()
+        if(this.state.informationCustomer.listjob.length === 0){
+          document.getElementById("Services").style.color = "red"
+        }
+        if( this.state.informationCustomer.addessCustomer === "" || this.state.informationCustomer.dayStart === ""
+        || this.state.informationCustomer.nameCustomer === "" || this.state.informationCustomer.phoneCustomer === "" || this.state.informationCustomer.timeStart === ""){
+          document.getElementById("Information").style.color = "red"
+      }
+    }
+    
+  }
+  notifySuccess = () => toast("Thành công!", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+
+  });
+
+  notifyFail = () => toast.error("Vui lòng thử lại", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+
+  });
+    componentDidMount(){
+
+      // Call API List Services
+      callApi("services","GET").then(res =>{
+        if(res.data.result != null || res.data.result != "False"){
+          this.setState({
+            ...this.state,
+            ListServices : res.data.result
+          })
+        }
+      })
+    }
+    componentDidUpdate(){
+    // Activeclass current Day
+
+    const dayActives = document.querySelectorAll(".dayy")
+    const currentMonth = document.querySelector(".month")
+    const currentYear = document.querySelector(".year")
+    const current = new Date();
+    const date = current.getDate();
+    const month = current.getMonth() + 1 ;
+    const year = current.getFullYear();
+    const removeActive = document.querySelectorAll(".dayy.active")
+    dayActives.forEach((dayActive) => {
+      
+      dayActive.onclick = () => {
+        if(dayActive.className === "dayy active"){
+          dayActive.className = " dayy";
+        }else{
+          dayActive.className += " active";
+          this.setState({
+            ...this.state,
+            informationCustomer:{
+              ...this.state.informationCustomer,
+              dayStart : [...this.state.informationCustomer.dayStart, " "+dayActive.innerHTML+"/"+currentMonth.innerText.slice(6)+"/"+currentYear.innerText]
+            }
+          })
+        }
+      }
+      /* if (dayActive.innerText === date.toString() &&
+            currentMonth.innerText.slice(6) === month.toString() &&
+              year.toString() === currentYear.innerText
+      ){
+          dayActive.className += " active";
+      } 
+      if( dayActive.innerText !== date.toString() ||
+           currentMonth.innerText.slice(6) !== month.toString() &&          
+           removeActive !== null 
+           ){
+            removeActive[i].classList.remove("active")
+      } */
     });
+
+    // End ActiveClass currentDay
+    }
+  render() {
     return (
       <>
       <Nav />
       <div className="Body-Home1">
         <div className="container p-4 ">
           <div className="selected-wrapper">
-            { this.state.listjob.length > 0 ? 
-              this.state.listjob.map((item,index) => {
+            { this.state.informationCustomer.listjob.length > 0 ? 
+              this.state.informationCustomer.listjob.map((item,index) => {
                 return (
                   <div className="selected" key={index}> {item}</div>
                 )
               }) :
-              <h2 style={ {color: "black"} }> Vui lòng chọn dịch vụ </h2>  
+              <h2 id="Services" style={ {color: "black"} }> Vui lòng chọn dịch vụ </h2>  
           }
           </div>
           <div className="row mt-5">
             <div className="col-md-3">
               <div className="select-warrper p-2 d-flex">
-                {DataServices.map((item) => {
+                {this.state.ListServices.map((item,index) => {
                   return (
-                    <div className="col-md-6 col-xs-3"  key={item.id}>
+                    <div className="col-md-6 col-xs-3"  key={index}>
                         <div className="select" 
-                          onClick={(event) => this.handleOnclickSelect(event)}>{item.name}</div>
+                          onClick={(event) => this.handleOnclickSelect(event)}>{item.NameServices}</div>
                     </div>
                   );
                 })}
@@ -107,16 +241,16 @@ class Services extends Component {
           
             <div className="col-md-9">
                 <div className="information-customer-wrapper">
-                  <div className="information-customer-header">
+                  <div className="information-customer-header" id="Information">
                     Vui lòng nhập đầy đủ thông tin bên dưới
                   </div>
                   <div className="information-customer-body">
-                    <form>
-                      <input placeholder="Họ Tên" />
-                      <input placeholder="Địa chỉ"/>
-                      <input placeholder="Số Điện Thoại"/>
+                    <form >
+                      <input placeholder="Họ Tên" name="nameCustomer" value={this.state.informationCustomer.nameCustomer} onChange={ (event)=> this.handleOnChangeInformation(event)}/>
+                      <input placeholder="Địa chỉ" name="addressCustomer"  value={this.state.informationCustomer.addressCustomer} onChange={ (event)=> this.handleOnChangeInformation(event)}/>
+                      <input placeholder="Số Điện Thoại" name="phoneCustomer" value={this.state.informationCustomer.phoneCustomer} onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                       <span>
-                        <input placeholder="Ngày" value="" className="date" disabled/>
+                        <input placeholder="Ngày" name="dayStart" value={this.state.informationCustomer.dayStart} className="date" disabled onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                         <BiCalendar className="icon" onClick={() => this.handleOnclickOpenCalendar()} />
                       </span>
                       <div className="calendarr-wrapper" id="calendar">
@@ -125,11 +259,11 @@ class Services extends Component {
                           <AiOutlineCloseCircle className="icon" id="icon" onClick={ this.handleOnClickCloseCalendar }/>
                         </div>
                       </div>
-                      <input type="time" placeholder="Giờ"/>
+                      <input type="time" name="timeStart" value={this.state.informationCustomer.timeStart} placeholder="Giờ" onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                     </form>
                   </div>
                   <div className="information-customer-footer">
-                    <button onClick={notify}>Gửi!</button>
+                    <button onClick={this.handleOnClickAddRequirement}>Gửi!</button>
                     <ToastContainer
                       position="top-center"
                       autoClose={1000}

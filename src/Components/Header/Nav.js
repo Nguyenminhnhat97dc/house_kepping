@@ -38,11 +38,21 @@ class Nav extends Component {
   }
 
  async componentDidMount() {
-    document.onclick = function(e){
+    /* document.onclick = function(e){
       if(e.target.id !== "wrapper-profile" && e.target.id !== "toggle" && e.target.id !== "chinbSua" && e.target.id !== "close-icon"){
-        document.getElementById("wrapper-profile").style.display = "none"
+        const check = document.getElementById("wrapper-profile")
+        if(check.style.display === "block"){
+          check.style.display = "none"
+        }
       }
-    }
+    } */
+    document.addEventListener('mouseup', function(e) {
+      var container = document.getElementById('wrapper-profile');
+      if (!container.contains(e.target)){
+          container.style.display = 'none';
+      }
+  });
+    
     callApi('provider/id','POST',{Id : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
       this.setState({
         ...[this.state],

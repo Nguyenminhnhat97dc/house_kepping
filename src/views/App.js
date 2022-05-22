@@ -11,11 +11,12 @@ import Login from "./Login/Login";
 import StaffLogin from "./Login/StaffLogin";
 import CustomerLogin from "./Login/CustomerLogin";
 function App() {
+
   return (
     <div className="App">
       <header className="App-header">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={localStorage.getItem("ProviderID") ? <Login /> : <Home />} />
           <Route path="introduce" element={<Introduce />} />
           <Route path="services" element={<Services />} />
           <Route path="login" element={ <Login /> } />

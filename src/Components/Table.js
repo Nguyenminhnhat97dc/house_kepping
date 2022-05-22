@@ -1,34 +1,34 @@
 import React, { Fragment } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { AiOutlineCheck,AiOutlineEdit } from "react-icons/ai"
-import { BiAddToQueue } from "react-icons/bi"
+import {AiOutlineCheck} from "react-icons/ai"
+/* import { BiAddToQueue } from "react-icons/bi"
 import { RiDeleteBin5Line } from "react-icons/ri"
-import { MdOutlineLibraryBooks } from "react-icons/md"
+import { MdOutlineLibraryBooks } from "react-icons/md" */
+import { connect } from 'react-redux';
 import "../styles/table.scss";
+import FormInformation from './formInformation';
 class TableJob extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+          formdata : 0,
+          checkShowForm : false,
+          Head : []
         }
-        
         this.handleOnclickOpen = this.handleOnclickOpen.bind(this)
-        this.handleOnclickClose = this.handleOnclickClose.bind(this)
-        this.handleClickClick = this.handleClickClick
+        this.handleClick = this.handleClick.bind(this)
+        console.log(">>>>>Constructor",this.props)
     }
-
+    handleClick = (event) =>{
+      const check = document.querySelectorAll("#form-container")
+      check[1].style.display = "block"
+      this.setState({...this.state,formdata : event})
+      document.getElementById("form-container").style.display = "block "
+    }
     handleOnclickOpen = (name) => {
       const abc = document.getElementById("container-report-problem")
       abc.style.display = "block"
-    };
-    handleOnclickClose = (name) => {
-      document.getElementById(name).style.display = "none"
     }
+    
     render() {
       var tbody
       if(this.props.typeTable === "todoList"){
@@ -36,15 +36,36 @@ class TableJob extends React.Component {
           <tbody>
           { this.props.addTableBody.map((item, index) => (
             <Fragment key={index}>
-              <tr className='table-row'
+              <tr className='table-row'onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
                   <td>{item.Id}</td>
                   <td>{item.NameServices}</td>
                   <td>{item.Status}</td>
                   <td>{item.DayStart}</td>
                   <td>{item.TimeStart}</td>
-                  {/* <td>{item.NameCustomer}</td>
-                  <td>{item.AddressCustomer}</td>
+                  <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
+                  {/* <td>{item.AddressCustomer}</td>
+                  <td>{item.PhoneCustomer}</td> */}
+                </tr>
+            </Fragment>
+          ))}
+        </tbody>
+        )
+      }
+      if(this.props.typeTable === "history"){
+        tbody = (
+          <tbody>
+          { this.props.addTableBody.map((item, index) => (
+            <Fragment key={index}>
+              <tr className='table-row'onDoubleClick={ () => this.handleClick(index)}
+                key={index}>
+                  <td>{item.Id}</td>
+                  <td>{item.NameServices}</td>
+                  <td>{item.Status}</td>
+                  <td>{item.DayStart}</td>
+                  <td>{item.TimeStart}</td>
+                  <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
+                  {/* <td>{item.AddressCustomer}</td>
                   <td>{item.PhoneCustomer}</td> */}
                 </tr>
             </Fragment>
@@ -57,22 +78,28 @@ class TableJob extends React.Component {
           <tbody>
           { this.props.addTableBody.map((item, index) => (
             <Fragment key={index}>
-              <tr className='table-row'
+              <tr className='table-row' onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
                   <td id='abcxyzz'>{item.NameServices}</td>
                   <td id='abcxyzz'>{item.DayStart}</td>
                   <td id='abcxyzz'>{item.TimeStart}</td>
                   <td id='abcxyzz'>{item.NameCustomer}</td>
                   <td id='abcxyzz'>{item.AddressCustomer}</td>
-                  <td><AiOutlineCheck  className='icon-accept' /></td>
+                  <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
                 </tr>
             </Fragment>
           ))}
         </tbody>
-        
       }
-      console.log(this.props.typeTable)
-      console.log(this.props)
+      let showForm
+     /*  if(this.state.checkShowForm){
+        showForm =
+         <FormInformation 
+          title = { this.props.addTableHead }
+          content = { this.props.addTableBody[this.state.formdata] }
+          typeForm = { this.props.typeTable }
+         />
+      } */
         return (
            /*  <>
             <TableContainer component={Paper} >
@@ -113,20 +140,32 @@ class TableJob extends React.Component {
           </Table>
         </TableContainer>
       </> */
-         <table className='table table-striped'>
+      <>
+         <table className='table table-striped' id="myTable">
            <thead>
              <tr>
-             {this.props.addTableHead.map( (row) => {
+             {this.props.addTableHead.map( (row,index) => {
                 return (
-                 <th key={row}>{row}</th>
+                 <th key={index}>{row}</th>
                 )
               })}
              </tr>
            </thead>
               {tbody}
          </table>
-            
+         <FormInformation 
+          title = { this.props.addTableHead }
+          content = { this.props.addTableBody[this.state.formdata] }
+          typeForm = { this.props.typeTable }
+         />
+      </>
           )
     }
 }
-export default TableJob
+
+const mapStateToProps = (state) =>{
+  return{
+    requirementCustomer : state
+  }
+}
+export default connect(mapStateToProps)(TableJob)

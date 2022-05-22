@@ -143,7 +143,7 @@ a {
             }
 
             .tablejob-2{
-                display: none;
+                display: block;
                 width: 800px;
                 margin-left: auto;
                 margin-right: auto;
@@ -154,31 +154,6 @@ a {
         }
         
     }
-    .center {
-        text-align: center;
-        padding-top: 15px;
-      }
-      
-      .pagination {
-        display: inline-block;
-      }
-      
-      .pagination div {
-        color: #0d6efd;
-        float: left;
-        padding: 5px 10px;
-        transition: background-color .3s;
-        border: 1px solid #ddd;
-        margin: 0 4px;
-        border-radius: 10px;
-      }
-      .pagination div:hover:not(.active) {background-color: #ddd;}
-      .pagination div.active {
-        background-color: #0d6efd;
-        color: white;
-        border: 1px solid #0d6efd;
-      }
-
     .history-job{
         width: 1100px;
         height: 570px;
@@ -198,12 +173,39 @@ a {
             overflow-x: auto;
 
             .history-table{
+                display: block;
                 width: 800px;
                 margin-left: auto;
                 margin-right: auto;
             }
         }
     }
+    .center {
+        text-align: center;
+        padding-top: 15px;
+      }
+      
+      .pagination {
+        display: inline-block;
+      }
+      
+      .pagination div {
+        color: #0d6efd;
+        float: left;
+        padding: 5px 10px;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .pagination div:hover:not(.active) {background-color: #ddd;}
+      .pagination div.active {
+        background-color: #0d6efd;
+        color: white;
+        border: 1px solid #0d6efd;
+      }
+
 }
 table thead tr{
     background-color: #282c34;
@@ -222,12 +224,13 @@ table tbody tr td{
     text-overflow: ellipsis;
     overflow: hidden;
     text-align: center;
+    user-select: none;
+    cursor: pointer;
     
 }
 .icon-accept{
     font-size: 20px;
     color:aqua;
-    margin-left: 20px;
     cursor: pointer;
     background-color: #323048;
     
@@ -293,24 +296,23 @@ table tbody tr td{
         position: relative;
         top:30%;
         left:43%;
-        width: 300px;
+        width: 400px;
         height: 400px;
         background-color: #141529;
         box-shadow: 0 0 10px 5px #c23564;
         color: #f8fbff;
 
         .add-job{
-            display: grid;
-            grid-template-columns: auto auto;
-            grid-template-rows: auto;
-            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
             justify-content: center;
             font-size: 18px;
             
             div{
                 text-align: center;
-                margin: 0 10px;
-                padding: 5px;
+                margin: 0 0px;
+                padding: 5px 10px;
                 div{
                     border: 2px solid #c23564;
                     border-radius: 10px;
@@ -322,6 +324,31 @@ table tbody tr td{
                     color: #151426;
                     border: 2px solid black;
                     box-shadow: 0 0 10px 2px lightblue;
+                }
+                .active{
+                    background-color: #fdfdfd;
+                    color: #151426;
+                    border: 2px solid black;
+                    box-shadow: 0 0 10px 2px lightblue;
+                }
+            }
+            .hola{
+                .Price{
+                    margin-top: 20px;
+                    padding-left: 5px;
+                    width: 100%;
+                }
+                .Add{
+                    margin-top: 40px;
+                    padding: 5px 10px;
+                    width: 50%;
+                    border-radius: 30px;
+                    background-color: #c23564;
+                    border: 2px solid #c23564;
+                    color: white;
+                }
+                .Add:hover{
+                    filter: brightness(1.2);
                 }
             }
         }
@@ -351,6 +378,7 @@ table tbody tr td{
     width: 100vw;
     height: 100vh;
     top:0;
+    left: 0;
     position: fixed;
     background-color: rgba(0,0,0,0.4);
     color: black;
@@ -468,7 +496,7 @@ table tbody tr td{
         .wrapper-add-job{
             left:10%;
             top:17%;
-
+            
         }
     }
 }

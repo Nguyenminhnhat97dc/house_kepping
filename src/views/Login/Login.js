@@ -74,7 +74,6 @@ class Login extends React.Component {
          })
     }
     render() {
-        console.log(">>>checkProps",this.props.provider)
         return (
             <>
             {this.state.isloggin || localStorage.getItem("loggin")?

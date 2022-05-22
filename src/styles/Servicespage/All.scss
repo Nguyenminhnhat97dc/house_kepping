@@ -1,5 +1,5 @@
 .Body-Home1{
-    background-color: #333;
+    background-color: #202124;
     margin: 3% 10%;
     box-shadow: 0 0 10px 8px lightblue;
     padding-bottom: 50px;
@@ -64,7 +64,7 @@
     color: #fff;
     flex-wrap: wrap;
     align-content: flex-start;
-
+    width: 350px;
     .select{
         border: 2px solid #333;
         background-color: #fffcf2;
@@ -154,7 +154,7 @@
     background-color: #ccc5b9;
     border-radius: 10px;
     .information-customer-header{
-        color: #d90429;
+        color: black;
         text-align: center;
         font-size: 1.8rem;
         padding-top: 10px;

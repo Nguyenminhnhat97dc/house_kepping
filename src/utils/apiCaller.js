@@ -1,8 +1,9 @@
 import axios from "axios";
 const API_URL = "http://localhost:8080"
 
-export default async function callApi(endpoint, method = 'GET', body){
+export default async function callApi(endpoint, method = 'GET', body = null){
     console.log(">>>CAllAPI Body",JSON.stringify(body))
+    console.log("URL", `${API_URL}/${endpoint}`)
     try {
         return await axios({
             method: method,
