@@ -12,6 +12,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai"
 import Nav from "../../Components/Header/Nav";
 import Calendar from "../../Components/Calendar/Calendar ";
 import callApi from "../../utils/apiCaller";
+import { nhapChu, nhapSo } from "../../Components/Function";
 class Services extends Component {
   constructor(props){
     super(props);
@@ -246,9 +247,15 @@ class Services extends Component {
                   </div>
                   <div className="information-customer-body">
                     <form >
-                      <input placeholder="Họ Tên" name="nameCustomer" value={this.state.informationCustomer.nameCustomer} onChange={ (event)=> this.handleOnChangeInformation(event)}/>
+                      <input placeholder="Họ Tên" name="nameCustomer" 
+                        onKeyPress={ event => nhapChu(event)}
+                        value={this.state.informationCustomer.nameCustomer} 
+                        onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                       <input placeholder="Địa chỉ" name="addressCustomer"  value={this.state.informationCustomer.addressCustomer} onChange={ (event)=> this.handleOnChangeInformation(event)}/>
-                      <input placeholder="Số Điện Thoại" name="phoneCustomer" value={this.state.informationCustomer.phoneCustomer} onChange={ (event)=> this.handleOnChangeInformation(event)}/>
+                      <input placeholder="Số Điện Thoại" name="phoneCustomer" 
+                        onKeyPress={ (event) =>  nhapSo(event)}
+                        value={this.state.informationCustomer.phoneCustomer} 
+                        onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                       <span>
                         <input placeholder="Ngày" name="dayStart" value={this.state.informationCustomer.dayStart} className="date" disabled onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                         <BiCalendar className="icon" onClick={() => this.handleOnclickOpenCalendar()} />
