@@ -8,7 +8,10 @@ import { connect } from "react-redux";
 import { nhapSo } from "../../Components/Function";
 import { ToastContainer, toast } from 'react-toastify';
 import { actFetchRequirementCustomer, actFetchServices } from "../../store/actions/index"
-class StaffLogin extends React.Component {
+//import { w3cwebsocket as W3CWebSocket } from "websocket";
+
+
+class StaffLogin extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,8 +33,13 @@ class StaffLogin extends React.Component {
       Price : "",
       nameServices : "",
       notify : "null",
-      countPagination : null,
-      servicesOfProvider : []
+      countPaginationRequirement : null,
+      countPaginationTodoList : null,
+      countPaginationHistory : null,
+      servicesOfProvider : ["","",""],
+      currentPaginationRequirement : 1,
+      currentPaginationTodoList : 1,
+      currentPaginationHistory :1
     };
 
     this.handleOnclickOpen = this.handleOnclickOpen.bind(this);
@@ -46,7 +54,13 @@ class StaffLogin extends React.Component {
     this.notifySuccess = this.notifySuccess.bind(this)
     this.notifyFail = this.notifyFail.bind(this)
     this.handleOnclickPagination = this.handleOnclickPagination.bind(this)
+    this.handleOnclickPaginationToDoList = this.handleOnclickPaginationToDoList.bind(this)
+    this.handleOnclickPaginationHistory = this.handleOnclickPaginationHistory.bind(this)
     this.handleDeleteService = this.handleDeleteService.bind(this)
+    this.SocketServiceOfProvider = this.SocketServiceOfProvider.bind(this)
+    this.SocketTodoList = this.SocketTodoList.bind(this)
+    this.SocketHistoryList = this.SocketHistoryList.bind(this)
+    this.addMessage = this.addMessage.bind(this)
   }
 
   handleOnclickOpen = (name) => {
@@ -74,7 +88,8 @@ class StaffLogin extends React.Component {
     document.getElementById("button-job1").classList.add("active-button")
     this.setState({
       ...[this.state],
-      checkTable : "requirementCustomer"
+      checkTable : "requirementCustomer",
+      currentPaginationTodoList : 1
     })
   }
 
@@ -83,7 +98,8 @@ class StaffLogin extends React.Component {
     document.getElementById("button-job2").classList.add("active-button")
     this.setState({
       ...[this.state],
-      checkTable : "todoList"
+      checkTable : "todoList",
+      currentPaginationRequirement : 1
     })
   }
 
@@ -116,12 +132,12 @@ class StaffLogin extends React.Component {
         this.setState({
           ...[this.state]
         })
-        this.notifySuccess()
+        this.notifyFail()
        }
     })
   }
 
-  notifySuccess = () => toast("Thành công!", {
+  notifySuccess = () => toast("Thành công", {
     position: "top-center",
     autoClose: 5000,
     hideProgressBar: false,
@@ -144,28 +160,40 @@ class StaffLogin extends React.Component {
   });
 
   handleOnclickPagination = (event) =>{
-    var start = 6 * (parseInt(event.target.textContent)-1)
-    alert(start)
-    callApi("requirementcustomer","POST",{ PaginationStart : start, PaginationEnd : 6 }).then(res =>{
-      try {
-        if(res.data.result != null){
-          this.setState({
-            ...this.state,
-            headTableJob:{
-              head : this.state.headTableJob.head,
-              body: res.data.result
-            },
-          })
-        }else{
-          alert("Rỗng")
-        }
-        this.props.fetrequirementCustomer(res.data.result)
-      } catch (error) {
-        alert(error)
-      }
+    const check = document.querySelector(".pagination .active")
+    if (check != null){
+      check.className = " "
+    }
+    event.target.className = "active"
+    this.setState({
+      ...this.state,
+      currentPaginationRequirement : parseInt(event.target.textContent)
     })
   }
 
+  handleOnclickPaginationToDoList = (event) =>{
+    alert(event.target.textContent)
+    const check = document.querySelector(".pagination .active")
+    if (check != null){
+      check.className = " "
+    }
+    event.target.className = "active"
+    this.setState({
+      ...this.state,
+      currentPaginationTodoList : parseInt(event.target.textContent)
+    })
+  }
+  handleOnclickPaginationHistory = (event) =>{
+    const check = document.querySelector(".pagination .active")
+    if (check != null){
+      check.className = " "
+    }
+    event.target.className = "active"
+    this.setState({
+      ...this.state,
+      currentPaginationHistory : parseInt(event.target.textContent)
+    })
+  }
   handleDeleteService = (value) =>{
     callApi("deleteservices","POST",{ ProviderId : parseInt(localStorage.getItem("ProviderID")), ServicesId : value }).then(res=>{
       try {
@@ -177,6 +205,183 @@ class StaffLogin extends React.Component {
       }
     })
   }
+  addMessage = (value) =>{
+    this.setState({
+      ...this.state,
+      servicesOfProvider : value
+    })
+  }
+  SocketServiceOfProvider = () =>{
+    var ws = new WebSocket("ws://localhost:8080/provider/services")
+    ws.addEventListener('error', function (event) {
+      console.log('WebSocket error: ', event);
+    });
+     //Triggered when connection is open
+     ws.onopen = function (evt){
+      console.log("Connection open ...");
+      var obj = { Id : localStorage.getItem("ProviderID")};
+      ws.send(JSON.stringify(obj));
+     }
+      //Triggered when a message is received
+     ws.onmessage = (res) => {
+      const valuesArray = JSON.parse(res.data);
+      /* if(res.data !== null){
+        this.setState({
+          ...this.state,
+          servicesOfProvider : ["","",""]
+        })
+      } */
+      this.setState({
+        ...this.state,
+        servicesOfProvider : valuesArray
+      })
+      //console.log(valuesArray)
+     };
+     //Triggered when connection is closed
+     ws.onclose = function (evt) {
+       console.log("Connection closed.");
+     };
+     
+  }
+  SocketRequirementCustomer = () =>{
+    var socket = new WebSocket("ws://localhost:8080/requirementcustomer")
+    socket.addEventListener('error', function (event) {
+      console.log('WebSocket error: ', event);
+    });
+     //Triggered when connection is open
+    socket.onopen = function (evt){
+      console.log("Connection open ...");
+     }
+      //Triggered when a message is received
+    socket.onmessage = (res) => {
+      const valuesArray = JSON.parse(res.data);
+      var dataPagination = []
+      var start = 7 * (this.state.currentPaginationRequirement-1)
+      var end
+      start === 0 ? end = 7 : end = start * 2
+
+      for (var i= start; i<= end ;i++ )
+        if(valuesArray[i]){
+          dataPagination.push(valuesArray[i])
+        }
+      this.setState({
+        ...this.state,
+        headTableJob:{
+          head : this.state.headTableJob.head,
+          body: dataPagination/* .slice(0,dataPagination.length-1) */
+        },
+      })
+
+      this.props.fetrequirementCustomer(res.data.result)
+     };
+     //Triggered when connection is closed
+     socket.onclose = function (evt) {
+       console.log("Connection closed.");
+       socket.onopen = function (evt){
+        console.log("Connection open ...");
+        var obj = { PaginationStart : 0, PaginationEnd : 8};
+        socket.send(JSON.stringify(obj));
+       }
+     };
+     
+  }
+
+  SocketTodoList = () =>{
+    var ws = new WebSocket("ws://localhost:8080/todolist")
+    ws.addEventListener('error', function (event) {
+      console.log('WebSocket error: ', event);
+    });
+     //Triggered when connection is open
+     ws.onopen = function (evt){
+      console.log("Connection open ...");
+      var obj = {
+         Id : localStorage.getItem("ProviderID")
+        };
+      ws.send(JSON.stringify(obj));
+     }
+      //Triggered when a message is received
+     ws.onmessage = (res) => {
+      const valuesArray = JSON.parse(res.data);
+      var dataPagination = []
+      var start = 7 * (this.state.currentPaginationTodoList -1)
+      var end
+      start === 0 ? end = 7 : end = start * 2
+
+      for (var i = start; i<= end ;i++ )
+        if(valuesArray[i]){
+          dataPagination.push(valuesArray[i])
+        }
+      this.setState({
+        ...this.state,
+        headrLisstJob:{
+          head : this.state.headrLisstJob.head,
+          body: dataPagination/* .slice(0,dataPagination.length-1) */
+        }
+      })
+      this.props.fetrequirementCustomer(res.data.result)
+      //console.log(">><<<><><><><><><><>",dataPagination)
+     };
+     //Triggered when connection is closed
+     ws.onclose = function (evt) {
+       console.log("Connection closed.");
+     };
+  }
+
+  SocketHistoryList = () =>{
+    var ws = new WebSocket("ws://localhost:8080/history")
+    ws.addEventListener('error', function (event) {
+      console.log('WebSocket error: ', event);
+    });
+     //Triggered when connection is open
+     ws.onopen = function (evt){
+      console.log("Connection open ...");
+      var obj = {
+         Id : localStorage.getItem("ProviderID")
+        };
+      ws.send(JSON.stringify(obj));
+     }
+      //Triggered when a message is received
+     ws.onmessage = (res) => {
+      const valuesArray = JSON.parse(res.data);
+      var dataPagination = []
+      var start = 7 * (this.state.currentPaginationHistory-1)
+      var end
+      start === 0 ? end = 7 : end = start * 2
+
+      for (var i= start; i<= end ;i++ )
+        if(valuesArray[i]){
+          dataPagination.push(valuesArray[i])
+        }
+      this.setState({
+        ...this.state,
+        history:{
+          head : this.state.history.head,
+          body: dataPagination/* .slice(0,dataPagination.length-1) */
+        }
+      })
+      this.props.fetrequirementCustomer(res.data.result)
+      //console.log(">><<<><><><><><><><>",valuesArray)
+     };
+     //Triggered when connection is closed
+     ws.onclose = function (evt) {
+       console.log("Connection closed.");
+     };
+  }
+  /* shouldComponentUpdate(nextProps, nextState){
+    if(this.state.servicesOfProvider !== nextState.servicesOfProvider ||
+        this.state.headTableJob.body !== nextState.headTableJob.body ||
+        this.state.headrLisstJob.body !== nextState.headrLisstJob.body ||
+        this.state.history.body !== nextState.history.body ||
+        this.state.checkTable !== nextState.checkTable ||
+        this.state.nameServices !== nextState.nameServices ||
+        this.state.Price !== nextState.Price
+      ){
+      console.log("Được render")
+      return true
+    }
+    return false;
+  } */
+
   async componentDidMount() {
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
@@ -210,7 +415,7 @@ class StaffLogin extends React.Component {
     }) */
 
     // call API việc cần làm
-    await callApi("todolist","POST",{ Id : localStorage.getItem("ProviderID"), Status : 0 }).then(res=>{
+    /* await callApi("todolist","POST",{ Id : localStorage.getItem("ProviderID"), Status : 0 }).then(res=>{
       try {
         this.setState({
           ...this.state,
@@ -222,9 +427,11 @@ class StaffLogin extends React.Component {
       } catch (error) {
         alert(error)
       }
-    })
+    }) */
+    this.SocketTodoList()
+
     // call API nhận việc
-    await callApi("requirementcustomer","POST",{ PaginationStart : 0, PaginationEnd : 6 }).then(res =>{
+    /* await callApi("requirementcustomer","POST",{ PaginationStart : 0, PaginationEnd : 6 }).then(res =>{
       try {
         this.setState({
           ...this.state,
@@ -237,9 +444,10 @@ class StaffLogin extends React.Component {
       } catch (error) {
         alert(error)
       }
-    })
+    }) */
+    this.SocketRequirementCustomer()
     // call API lịch sử cộng việc
-    await callApi("todolist","POST",{ Id : localStorage.getItem("ProviderID"), Status : 1 }).then(res=>{
+    /* await callApi("todolist","POST",{ Id : localStorage.getItem("ProviderID"), Status : 1 }).then(res=>{
       try {
         this.setState({
           ...this.state,
@@ -251,24 +459,27 @@ class StaffLogin extends React.Component {
       } catch (error) {
         alert(error)
       }
-    })
-    // call API danh sách dịch vục
+    }) */
+    this.SocketHistoryList()
+    /* this.SocketTodoList(1) */
+    // call API danh sách dịch vụ
     await callApi("services","GET").then(res =>{
       try {
         if(res.data.result !== null || res.data.result !== "False"){
           this.props.fetServices(res.data.result)
+          /* console.log("Services lấy được",res.data.result) */
         }
       } catch (error) {
         alert(error)
       }
     })
-    // call API pagination
-    await callApi("pagination","POST",{Status : 0}).then(res =>{
+    // call API paginationRequirement
+    await callApi("paginationrequirement","POST",{Status : 0}).then(res =>{
       try {
         if(res.data.result !==null){
           this.setState({
             ...this.state,
-            countPagination : res.data.result.Count
+            countPaginationRequirement : res.data.result.Count
           })
         }else{
           alert("Faillllllllllllllllll")
@@ -277,7 +488,40 @@ class StaffLogin extends React.Component {
         alert(error)
       }
     })
-    await callApi("provider/services","POST", { Id : localStorage.getItem("ProviderID") }).then(res=>{
+
+    // call API paginationTodoList
+    await callApi("paginationtodolist","POST",{Status : 0, ProviderId : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
+      try {
+        if(res.data.result !==null){
+          this.setState({
+            ...this.state,
+            countPaginationTodoList : res.data.result.Count
+          })
+        }else{
+          alert("Faillllllllllllllllll")
+        }
+      } catch (error) {
+        alert(error)
+      }
+    })
+
+    // call API paginationTodoListHistory
+    await callApi("paginationtodolist","POST",{Status : 1, ProviderId : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
+      try {
+        if(res.data.result !==null){
+          this.setState({
+            ...this.state,
+            countPaginationHistory : res.data.result.Count
+          })
+        }else{
+          alert("Faillllllllllllllllll")
+        }
+      } catch (error) {
+        alert(error)
+      }
+    })
+
+    /* await callApi("provider/services","POST", { Id : localStorage.getItem("ProviderID") }).then(res=>{
       try {
         if(res.data.result !== null){
           this.setState({
@@ -288,22 +532,50 @@ class StaffLogin extends React.Component {
       } catch (error) {
         alert(error)
       }
-    })
-
+    }) */
+    this.SocketServiceOfProvider()
+    console.log(">>>>>>Đã vô DidMount")
   }
 
+  /* componentWillUnmount(){
+    socket.close()
+  } */
 
   render() {
     //let checkTodoList
     let pagination1
     let pagination2
     let calPagination
-    var showPagination = []
-    if(this.state.countPagination !== null){
-      calPagination = Math.ceil(this.state.countPagination/6)
+    var showPaginationRequirement = []
+    var showPaginationTodoList = []
+    var showPaginationHistory = []
+    if(this.state.countPaginationRequirement !== null ){
+      calPagination = Math.ceil(this.state.countPaginationRequirement/8)
       for(var i = 2; i<= calPagination; i++){
-        showPagination.push(
+        showPaginationRequirement.push(
           <div key={i} onClick={this.handleOnclickPagination}>{i}</div>
+        )
+        if(i === 6){
+          break
+        }
+      }
+    }
+    if(this.state.countPaginationTodoList !== null){
+      calPagination = Math.ceil(this.state.countPaginationTodoList/8)
+      for( i = 2; i<= calPagination; i++){
+        showPaginationTodoList.push(
+          <div key={i} onClick={this.handleOnclickPaginationToDoList}>{i}</div>
+        )
+        if(i === 6){
+          break
+        }
+      }
+    }
+    if(this.state.countPaginationHistory !== null){
+      calPagination = Math.ceil(this.state.countPaginationHistory/8)
+      for( i = 2; i<= calPagination; i++){
+        showPaginationHistory.push(
+          <div key={i} onClick={this.handleOnclickPaginationHistory}>{i}</div>
         )
         if(i === 6){
           break
@@ -318,14 +590,13 @@ class StaffLogin extends React.Component {
           <div className="pagination">
               <div>&laquo;</div>
               <div className="active" onClick={this.handleOnclickPagination}>1</div>
-              {showPagination}
+              {showPaginationRequirement}
               <div >&raquo;</div>
           </div>
         </div>
       </>)
     }
     if(this.state.checkTable === "todoList"){
-      console.log(">>>>>>>headLisstJob",this.state.headrLisstJob.body[0])
       if(typeof(this.state.headrLisstJob.body[0]) !== 'string' ){
         tableShow = (
           <div className="tablejob-2" id="tablejob-2"> <TableJob typeTable={"todoList"} addTableHead={ this.state.headrLisstJob.head} addTableBody = { this.state.headrLisstJob.body }/></div>
@@ -333,8 +604,8 @@ class StaffLogin extends React.Component {
         pagination1 = (
           <div className="pagination">
             <div >&laquo;</div>
-            <div className="active" onClick={this.handleOnclickPagination}>1</div>
-            {showPagination}
+            <div className="active" onClick={this.handleOnclickPaginationToDoList}>1</div>
+            {showPaginationTodoList}
             <div >&raquo;</div>
           </div>
         )
@@ -354,8 +625,8 @@ class StaffLogin extends React.Component {
       pagination2 = (
         <div className="pagination">
           <div >&laquo;</div>
-          <div className="active" onClick={this.handleOnclickPagination}>1</div>
-          {showPagination}
+          <div className="active" onClick={this.handleOnclickPaginationHistory}>1</div>
+          {showPaginationHistory}
           <div >&raquo;</div>
         </div>
       )
@@ -367,9 +638,7 @@ class StaffLogin extends React.Component {
       )
     }
     var showServices = []
-    console.log(typeof(this.props.services))
     if(typeof(this.props.services) != "undefined"){
-      console.log(this.props.services)
       this.props.services.map((item,index) => (
         showServices.push(
           <div key={index}>

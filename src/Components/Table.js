@@ -16,19 +16,26 @@ class TableJob extends React.Component {
         }
         this.handleOnclickOpen = this.handleOnclickOpen.bind(this)
         this.handleClick = this.handleClick.bind(this)
-        console.log(">>>>>Constructor",this.props)
     }
     handleClick = (event) =>{
-      const check = document.querySelectorAll("#form-container")
-      check[1].style.display = "block"
       this.setState({...this.state,formdata : event})
-      document.getElementById("form-container").style.display = "block "
+      setTimeout(() => {
+        const check = document.querySelectorAll("#form-container")
+        check[1].style.display = "block"
+        document.getElementById("form-container").style.display = "block "
+      },250);
     }
     handleOnclickOpen = (name) => {
       const abc = document.getElementById("container-report-problem")
       abc.style.display = "block"
     }
     
+    shouldComponentUpdate(nextProps){
+      if(this.props != nextProps){
+        return true
+      }
+      return false
+    }
     render() {
       var tbody
       if(this.props.typeTable === "todoList"){
@@ -38,7 +45,7 @@ class TableJob extends React.Component {
             <Fragment key={index}>
               <tr className='table-row'onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
-                  <td>{item.Id}</td>
+                  <td>{index + 1}</td>
                   <td>{item.NameServices}</td>
                   <td>{item.Status}</td>
                   <td>{item.DayStart}</td>
@@ -59,11 +66,12 @@ class TableJob extends React.Component {
             <Fragment key={index}>
               <tr className='table-row'onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
-                  <td>{item.Id}</td>
+                  <td>{index +1}</td>
                   <td>{item.NameServices}</td>
                   <td>{item.Status}</td>
                   <td>{item.DayStart}</td>
                   <td>{item.TimeStart}</td>
+                  <td>{item.DayEnd}</td>
                   <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
                   {/* <td>{item.AddressCustomer}</td>
                   <td>{item.PhoneCustomer}</td> */}
@@ -80,7 +88,7 @@ class TableJob extends React.Component {
             <Fragment key={index}>
               <tr className='table-row' onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
-                  <td id='abcxyzz'>{item.NameServices}</td>
+                  <td style={{textAlign: "left"}} id='abcxyzz'>{item.NameServices}</td>
                   <td id='abcxyzz'>{item.DayStart}</td>
                   <td id='abcxyzz'>{item.TimeStart}</td>
                   <td id='abcxyzz'>{item.NameCustomer}</td>

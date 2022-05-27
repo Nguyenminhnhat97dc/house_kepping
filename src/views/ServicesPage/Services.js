@@ -100,16 +100,16 @@ class Services extends Component {
     }
 
     handleOnClickAddRequirement = () =>{
-      if(this.state.informationCustomer.listjob.length > 0 && this.state.informationCustomer.addessCustomer != "" && this.state.informationCustomer.dayStart !=""
-      && this.state.informationCustomer.nameCustomer !="" && this.state.informationCustomer.phoneCustomer !="" && this.state.informationCustomer.timeStart !=""){
+      if(this.state.informationCustomer.listjob.length > 0 && this.state.informationCustomer.addessCustomer !== "" && this.state.informationCustomer.dayStart !==""
+      && this.state.informationCustomer.nameCustomer !=="" && this.state.informationCustomer.phoneCustomer !=="" && this.state.informationCustomer.timeStart !==""){
         let nameServices = this.state.informationCustomer.listjob
         let dayStart = this.state.informationCustomer.dayStart
-        let services = ""
+        let services /* = "" */
         for ( var i = 0; i< nameServices.length; i++){
           services = services + ", " + nameServices[i]
         }
-        let daystart = ""
-        for ( var i = 0; i< dayStart.length; i++){
+        let daystart /* = "" */
+        for ( i = 0; i< dayStart.length; i++){
           daystart = daystart + ", " + dayStart[i]
         }
         callApi("requirement","POST",{
@@ -159,7 +159,7 @@ class Services extends Component {
 
       // Call API List Services
       callApi("services","GET").then(res =>{
-        if(res.data.result != null || res.data.result != "False"){
+        if(res.data.result !== null || res.data.result !== "False"){
           this.setState({
             ...this.state,
             ListServices : res.data.result
@@ -175,24 +175,41 @@ class Services extends Component {
     const currentYear = document.querySelector(".year")
     const current = new Date();
     const date = current.getDate();
-    const month = current.getMonth() + 1 ;
+    /* const month = current.getMonth() + 1 ;
     const year = current.getFullYear();
-    const removeActive = document.querySelectorAll(".dayy.active")
+    const removeActive = document.querySelectorAll(".dayy.active") */
     dayActives.forEach((dayActive) => {
-      
+
       dayActive.onclick = () => {
-        if(dayActive.className === "dayy active"){
-          dayActive.className = " dayy";
+        if(dayActive.textContent === "0" || parseInt(dayActive.textContent) < date){
+          return null
         }else{
-          dayActive.className += " active";
-          this.setState({
-            ...this.state,
-            informationCustomer:{
-              ...this.state.informationCustomer,
-              dayStart : [...this.state.informationCustomer.dayStart, " "+dayActive.innerHTML+"/"+currentMonth.innerText.slice(6)+"/"+currentYear.innerText]
-            }
-          })
+          if(dayActive.className === "dayy active"){
+            dayActive.className = " dayy";
+            var deleteDay = " "+dayActive.innerHTML+"/"+currentMonth.innerText.slice(6)+"/"+currentYear.innerText
+            console.log(deleteDay)
+            console.log(this.state.informationCustomer.dayStart)
+            let dayStartCurrent = this.state.informationCustomer.dayStart.filter( item => item !== deleteDay )
+            console.log(dayStartCurrent)
+            this.setState({
+              ...this.state,
+              informationCustomer:{
+                ...this.state.informationCustomer,
+                dayStart : dayStartCurrent
+              }
+            })
+          }else{
+            dayActive.className += " active";
+            this.setState({
+              ...this.state,
+              informationCustomer:{
+                ...this.state.informationCustomer,
+                dayStart : [...this.state.informationCustomer.dayStart, " "+dayActive.innerHTML+"/"+currentMonth.innerText.slice(6)+"/"+currentYear.innerText]
+              }
+            })
+          }
         }
+        
       }
       /* if (dayActive.innerText === date.toString() &&
             currentMonth.innerText.slice(6) === month.toString() &&

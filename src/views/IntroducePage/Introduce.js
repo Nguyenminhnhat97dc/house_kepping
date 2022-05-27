@@ -9,7 +9,7 @@ class Introduce extends Component {
         <Nav />
         <div className="Body-Home">
         <div className="container p-4">
-          <h3 className="mb-5">Công Ty TNHH Dịch Vụ Giáo Dục ABC - Tên thương hiệu: ABCXYZ </h3>
+          <h3 style={{color :"rgb(97, 218, 251)"}} className="mb-5">Công Ty TNHH Dịch Vụ Giáo Dục ABC - Tên thương hiệu: ABCXYZ </h3>
           <div className="row mt-4">
             <div className="col-md-7 col-sm-12" style={{ fontSize:'19px' }}>
               GiupViecTot.vn (giúp việc tốt) với 05 năm trong lĩnh vực dịch vụ

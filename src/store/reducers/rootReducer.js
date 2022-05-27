@@ -1,5 +1,8 @@
 import * as Types from "../../constants/ActionType";
-var initState = []
+var initState = {
+    requirement : [],
+    services :[]
+}
 
 const rootReducer = (state = initState, action) => {
     switch(action.type){
@@ -7,7 +10,7 @@ const rootReducer = (state = initState, action) => {
             state = {...action.providers}
             return state 
         case Types.FETCH_REQUIREMENTCUSTOMER:
-            state = {...action.requirementCustomer}
+            state = {...state, requirement: action.requirementCustomer}
             return state
         case Types.FETCH_SERVICES:
             state = {...state, services : action.services}

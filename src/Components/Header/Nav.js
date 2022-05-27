@@ -5,6 +5,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai"
 import { nhapChu, nhapSo } from "../../Components/Function";
 import { connect } from "react-redux";
 import callApi from "../../utils/apiCaller";
+import { toast,ToastContainer } from "react-toastify";
 import {actFetchProvider} from "../../store/actions/index"
 class Nav extends Component {
   constructor(props) {
@@ -21,7 +22,9 @@ class Nav extends Component {
       this.handleOnclickClose = this.handleOnclickClose.bind(this)
       this.handleLogOut = this.handleLogOut.bind(this)
       this.handleOnchangeInformation = this.handleOnchangeInformation.bind(this)
-      this.handleUpdateInformation = this.handleUpdateInformation.bind(this)
+      this.notifySuccess = this.notifySuccess.bind(this)
+      this.notifyFail = this.notifyFail.bind(this)
+      this.handleSaveInformation = this.handleSaveInformation.bind(this)
   }
 
   handleOpenProfile = (name) => {
@@ -48,7 +51,8 @@ class Nav extends Component {
     } */
     document.addEventListener('mouseup', function(e) {
       var container = document.getElementById('wrapper-profile');
-      if (!container.contains(e.target)){
+      var container2 = document.getElementById('table-chinhSua')
+      if (!container.contains(e.target) || !container2.contains(e.target)){
           container.style.display = 'none';
       }
   });
@@ -57,7 +61,7 @@ class Nav extends Component {
       this.setState({
         ...[this.state],
         Name : res.data.result.Name,
-        CCCD :"abc",
+        CCCD : res.data.result.CCCD,
         Address: res.data.result.Address,
         Phone: res.data.result.Phone
       })
@@ -65,7 +69,9 @@ class Nav extends Component {
     this.setState({
       isLoggedIn : this.props.isloggin,
     })
+
   }
+
   handleLogOut = () => {
     localStorage.removeItem("loggin")
     localStorage.removeItem("ProviderID")
@@ -78,10 +84,47 @@ class Nav extends Component {
       [event.target.name] : value
     })
   }
-
-  handleUpdateInformation = (event) =>{
-
+  handleSaveInformation = () =>{
+    callApi("updateprovider","POST",{
+      ProviderId : parseInt(localStorage.getItem("ProviderID")),
+      Name : this.state.Name,
+      Address : this.state.Address,
+      CCCD : this.state.CCCD,
+      Phone : this.state.Phone,
+      introduce : this.state.Phone
+    }).then(res =>{
+      this.setState({
+        ...[this.state],
+        Name : res.data.result.Name,
+        CCCD : res.data.result.CCCD,
+        Address: res.data.result.Address,
+        Phone: res.data.result.Phone
+      })
+      this.notifySuccess()
+    })
+     
   }
+
+
+  notifySuccess = () => toast("Thành công", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+  });
+
+  notifyFail = () => toast("Nhận việc thất bại", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+  });
   render() {
 
     let navVigation
@@ -151,13 +194,13 @@ class Nav extends Component {
               <label>Địa chỉ:</label>
               <input type="text" value={this.state.Address} name="Address"onChange={this.handleOnchangeInformation}/>
               <label>Căn cước công dân:</label>
-              <input type="text"value={this.state.CCCD} name="CCCD"  maxLength="12"onChange={this.handleOnchangeInformation} onKeyPress={ (event) => nhapSo(event) }/>
+              <input type="text"value={this.state.Phone} name="CCCD"  maxLength="12"onChange={this.handleOnchangeInformation} onKeyPress={ (event) => nhapSo(event) }/>
               <label>Số điện thoại:</label>
-              <input type="text" value={this.state.Phone} name="Phone" maxLength="11"onChange={this.handleOnchangeInformation} onKeyPress={ (event) => nhapSo(event) }/>
+              <input type="text" value={this.state.CCCD} name="Phone" maxLength="11"onChange={this.handleOnchangeInformation} onKeyPress={ (event) => nhapSo(event) }/>
               <label>Giới thiệu:</label>
               <textarea className="mt-3" rows="5"></textarea>
             </form>
-            <button className="btn btn-danger">Lưu</button>
+            <button className="btn btn-danger" onClick={this.handleSaveInformation}>Lưu</button>
           </div>
         </div>
       </>
