@@ -104,11 +104,11 @@ class Services extends Component {
       && this.state.informationCustomer.nameCustomer !=="" && this.state.informationCustomer.phoneCustomer !=="" && this.state.informationCustomer.timeStart !==""){
         let nameServices = this.state.informationCustomer.listjob
         let dayStart = this.state.informationCustomer.dayStart
-        let services /* = "" */
+        let services = ""
         for ( var i = 0; i< nameServices.length; i++){
           services = services + ", " + nameServices[i]
         }
-        let daystart /* = "" */
+        let daystart = ""
         for ( i = 0; i< dayStart.length; i++){
           daystart = daystart + ", " + dayStart[i]
         }
@@ -175,13 +175,15 @@ class Services extends Component {
     const currentYear = document.querySelector(".year")
     const current = new Date();
     const date = current.getDate();
-    /* const month = current.getMonth() + 1 ;
+    const month = current.getMonth() + 1 ;
     const year = current.getFullYear();
-    const removeActive = document.querySelectorAll(".dayy.active") */
+    //const removeActive = document.querySelectorAll(".dayy.active") 
     dayActives.forEach((dayActive) => {
 
       dayActive.onclick = () => {
-        if(dayActive.textContent === "0" || parseInt(dayActive.textContent) < date){
+        if(dayActive.textContent === "0" || 
+        (parseInt(dayActive.textContent) < date && parseInt(currentMonth.textContent) < month ) ||
+         parseInt(currentYear.textContent) < year ){
           return null
         }else{
           if(dayActive.className === "dayy active"){
@@ -228,6 +230,7 @@ class Services extends Component {
     // End ActiveClass currentDay
     }
   render() {
+    //console.log(this.state)
     return (
       <>
       <Nav />

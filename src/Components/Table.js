@@ -21,7 +21,9 @@ class TableJob extends React.Component {
       this.setState({...this.state,formdata : event})
       setTimeout(() => {
         const check = document.querySelectorAll("#form-container")
-        check[1].style.display = "block"
+        if(check[1]){
+          check[1].style.display = "block"
+        }
         document.getElementById("form-container").style.display = "block "
       },250);
     }
@@ -31,7 +33,7 @@ class TableJob extends React.Component {
     }
     
     shouldComponentUpdate(nextProps){
-      if(this.props != nextProps){
+      if(this.props !== nextProps){
         return true
       }
       return false
@@ -99,7 +101,7 @@ class TableJob extends React.Component {
           ))}
         </tbody>
       }
-      let showForm
+      
      /*  if(this.state.checkShowForm){
         showForm =
          <FormInformation 

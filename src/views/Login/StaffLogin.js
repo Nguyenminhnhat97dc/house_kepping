@@ -235,7 +235,7 @@ class StaffLogin extends React.PureComponent {
         ...this.state,
         servicesOfProvider : valuesArray
       })
-      //console.log(valuesArray)
+      //console.log(">>>SocketServies",valuesArray)
      };
      //Triggered when connection is closed
      ws.onclose = function (evt) {
@@ -271,7 +271,7 @@ class StaffLogin extends React.PureComponent {
           body: dataPagination/* .slice(0,dataPagination.length-1) */
         },
       })
-
+      //console.log(">>>SocketRequirememmt",dataPagination)
       this.props.fetrequirementCustomer(res.data.result)
      };
      //Triggered when connection is closed
@@ -319,7 +319,7 @@ class StaffLogin extends React.PureComponent {
         }
       })
       this.props.fetrequirementCustomer(res.data.result)
-      //console.log(">><<<><><><><><><><>",dataPagination)
+      //console.log("SocketTodo",dataPagination)
      };
      //Triggered when connection is closed
      ws.onclose = function (evt) {
@@ -360,7 +360,7 @@ class StaffLogin extends React.PureComponent {
         }
       })
       this.props.fetrequirementCustomer(res.data.result)
-      //console.log(">><<<><><><><><><><>",valuesArray)
+      //console.log(">><<<><><><><><><><>",dataPagination)
      };
      //Triggered when connection is closed
      ws.onclose = function (evt) {
@@ -709,17 +709,19 @@ class StaffLogin extends React.PureComponent {
                   <h2>Danh sách công việc</h2>
                   <div className="table-custom align-middle pt-3">
                     <div className="btn btn-danger addition" onClick={() => this.handleOnclickOpen("container-add-job")}>Thêm</div>
-                    {this.state.servicesOfProvider.map((item,index) =>(
-                      <Fragment key={index}>
-                        <div className="wrapper-table">
-                          <div className="col">{item.NameServices}</div>
-                          <div className="col">{item.Price} VNĐ</div>
-                          <div className="col">
-                            <button className="btn btn-danger" onClick={() => this.handleDeleteService(item.ServicesId)}>Xóa</button>
+                    {this.state.servicesOfProvider === null ? null :
+                      this.state.servicesOfProvider.map((item,index) =>(
+                        <Fragment key={index}>
+                          <div className="wrapper-table">
+                            <div className="col">{item.NameServices}</div>
+                            <div className="col">{item.Price} VNĐ</div>
+                            <div className="col">
+                              <button className="btn btn-danger" onClick={() => this.handleDeleteService(item.ServicesId)}>Xóa</button>
+                            </div>
                           </div>
-                        </div>
-                      </Fragment>
-                    ))}
+                        </Fragment>
+                      ))
+                    }
                   </div>
                 </div>
                 <div className="tab-pane ">

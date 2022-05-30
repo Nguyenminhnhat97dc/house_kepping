@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/Components/Calendar.scss";
 import { FcPrevious, FcNext } from "react-icons/fc";
-class Calendar extends React.Component {
+class Calendar extends React.PureComponent {
   constructor(props) {
     super(props);
     const current = new Date();
@@ -15,6 +15,7 @@ class Calendar extends React.Component {
       getFebDays: 28,
       arrayDayOfMonth: [],
       dayOfMonth: [],
+      saveIndex :[]
     };
 
     this.handleOnclickShow = this.handleOnclickShow.bind(this);
@@ -24,6 +25,8 @@ class Calendar extends React.Component {
     this.showDayOfMonth = this.showDayOfMonth.bind(this)
 
     this.handleChange = this.handleChange.bind(this)
+    this.handleOnclickMonthPicker = this.handleOnclickMonthPicker.bind(this)
+    this.handleOnclickYear = this.handleOnclickYear.bind(this)
   }
 
   handleOnclickShow = () => {
@@ -99,10 +102,59 @@ class Calendar extends React.Component {
 
   // end list day of month
 
+  handleOnclickMonthPicker = (event) => {
+    //const dayActive = document.querySelectorAll(".dayy.active")
+    const dayActives = document.querySelectorAll(".dayy")
+    const current = new Date();
+    const month = current.getMonth() + 1 ;
+    let arrIndex = []
+    if(month !== parseInt(event.target.innerText.slice(6))){
+      dayActives.forEach((dayActive,index) =>{
+        if(dayActive.className === "dayy active"){
+          console.log(index)
+          arrIndex.push(index)
+          this.setState({
+            ...this.state,
+            saveIndex : arrIndex
+          })
+          dayActive.className = "dayy"
+        }
+      })
+    }
+    if(month === parseInt(event.target.innerText.slice(6)) && this.state.saveIndex.length > 0){
+      console.log(this.state)
+      this.state.saveIndex.forEach((index) => {
+        dayActives[index].className = "dayy active"
+      })
+    }
+  }
+  handleOnclickYear = (value) =>{
+    const dayActives = document.querySelectorAll(".dayy")
+    const current = new Date();
+    const year = current.getFullYear();
 
-
+    let arrIndex = []
+    if(year !== parseInt(value)){
+      dayActives.forEach((dayActive,index) =>{
+        if(dayActive.className === "dayy active"){
+          console.log(index)
+          arrIndex.push(index)
+          this.setState({
+            ...this.state,
+            saveIndex : arrIndex
+          })
+          dayActive.className = "dayy"
+        }
+      })
+    }
+    if(year === parseInt(value) && this.state.saveIndex.length > 0){
+      this.state.saveIndex.forEach((index) => {
+        dayActives[index].className = "dayy active"
+      })
+    }
+  }
   componentDidMount() {
-    console.log(">>>RunDisMount")
+
     // calendar algorithm
     this.showDayOfMonth()
 
@@ -112,17 +164,16 @@ class Calendar extends React.Component {
 
   
   componentDidUpdate() {   
-    console.log(">>>>>Run DidUpdate")
+
     // Change Month
     const $$ = document.querySelectorAll.bind(document);
     const monthOfYears = $$(".month-select");
+    
     let month_picker = document.getElementById("month-picker");
-
     monthOfYears.forEach((monthOfYear, index) => { 
       monthOfYear.onclick = function () {
         month_picker.classList.remove("show");
         changeMonth(monthOfYear.innerText.slice(6));
-        
       };
     });
 
@@ -166,16 +217,17 @@ class Calendar extends React.Component {
 
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  /* shouldComponentUpdate(nextProps, nextState) {
     if (this.state.year !== nextState.year || this.state.month !== nextState.month ||
        this.state.dayOfMonth !== nextState.dayOfMonth) {
       return true; 
     }
     return false;
-  }
+  } */
 
 
   render() {
+
     var dayOfMonth = [];
     for (var i = 0; i < this.state.dayOfMonth.length; i++) {
       dayOfMonth.push(
@@ -194,9 +246,9 @@ class Calendar extends React.Component {
               Tháng {this.state.month}
             </div>
             <div className="year" >
-              <FcPrevious className="year-change" />
+              <FcPrevious className="year-change" onClick={ this.handleOnclickYear(this.state.year)}/>
               {this.state.year}
-              <FcNext className="year-change" />
+              <FcNext className="year-change" onClick={this.handleOnclickYear(this.state.year)}/>
             </div>
           </div>
           <div className="calendar-body">
@@ -214,18 +266,18 @@ class Calendar extends React.Component {
             <div className="calendar-day">{dayOfMonth}</div>
           </div>
           <div className="month-list" id="month-picker">
-            <div className="month-select">Tháng 1</div>
-            <div className="month-select">Tháng 2</div>
-            <div className="month-select">Tháng 3</div>
-            <div className="month-select">Tháng 4</div>
-            <div className="month-select">Tháng 5</div>
-            <div className="month-select">Tháng 6</div>
-            <div className="month-select">Tháng 7</div>
-            <div className="month-select">Tháng 8</div>
-            <div className="month-select">Tháng 9</div>
-            <div className="month-select">Tháng 10</div>
-            <div className="month-select">Tháng 11</div>
-            <div className="month-select">Tháng 12</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 1</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 2</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 3</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 4</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 5</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 6</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 7</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 8</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 9</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 10</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 11</div>
+            <div className="month-select" onClick={ (event) => this.handleOnclickMonthPicker(event) }>Tháng 12</div>
           </div>
         </div>
       </div>

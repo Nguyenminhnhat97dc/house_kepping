@@ -57,18 +57,20 @@ class Nav extends Component {
       }
   });
     
-    callApi('provider/id','POST',{Id : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
-      this.setState({
-        ...[this.state],
-        Name : res.data.result.Name,
-        CCCD : res.data.result.CCCD,
-        Address: res.data.result.Address,
-        Phone: res.data.result.Phone
+    if(this.state.isLoggedIn === true || localStorage.getItem("loggin")){
+      callApi('provider/id','POST',{Id : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
+        this.setState({
+          ...[this.state],
+          Name : res.data.result.Name,
+          CCCD : res.data.result.CCCD,
+          Address: res.data.result.Address,
+          Phone: res.data.result.Phone
+        })
       })
-    })
-    this.setState({
-      isLoggedIn : this.props.isloggin,
-    })
+      this.setState({
+        isLoggedIn : this.props.isloggin,
+      })
+    }
 
   }
 

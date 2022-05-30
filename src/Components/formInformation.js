@@ -21,7 +21,8 @@ class FormInformation extends React.Component{
 
     handleOnclickClose = (name) => {
       const check = document.querySelectorAll("#form-container")
-      check[1].style.display = "none"
+      if(check[1])
+        check[1].style.display = "none"
       document.getElementById(name).style.display = "none"
     }
 
@@ -30,7 +31,9 @@ class FormInformation extends React.Component{
         try {
           if(res.data.result === "True"){
             this.notifySuccess()
-            document.getElementById("form-container").style.display = "none"
+            if(document.getElementById("form-container")){
+              document.getElementById("form-container").style.display = "none"
+            }
           }else{
             this.notifyFail()
           }
@@ -105,6 +108,7 @@ class FormInformation extends React.Component{
     }
     componentDidUpdate(){
       if(typeof(this.props.content) !== "undefined"){
+        //console.log(">>>>>>>>>",this.props.content)
         var mystring = this.props.content.NameServices
         this.setState({
           typeForm : this.props.typeForm,
@@ -208,29 +212,41 @@ class FormInformation extends React.Component{
       ){
         let price = this.state.priceServices
         //console.log(">>Dịch vụ chưa có giá",this.state.nameServices)
-        //console.log(">>>Danh sách các dịch vụ",price)
-        this.state.nameServices.map( (item) => {
-          return (
-            price = price.filter( itemm => itemm.NameServices !== item)
-
-          )
-        })
+        if(Object.values(price).length > 0){
+          this.state.nameServices.map( async(item) => {
+            return (
+              price = await price.filter( itemm => itemm.NameServices !== item)
+            )
+          })
+        }  
         let newPrice = this.state.priceServices
-        price.map( (item) => {
-          return (
-            newPrice = newPrice.filter( itemm => itemm.NameServices !== item.NameServices)
-
-          )
-        })
+        //console.log(">>>",price)
+        if(Object.values(price).length > 0){
+          price.map( async(item) => {
+            return (
+              newPrice = await newPrice.filter( itemm => itemm.NameServices !== item.NameServices)
+            )
+          })
+        }
         //console.log("dịch vụ đã có giá",newPrice)
+        if(Object.values(newPrice).length > 0){
+          informationTable = (
+            newPrice.map( (item,index) => (
+              <tr key={index}>
+                <td>{item.NameServices}</td>
+                <td>{item.Price}</td>
+              </tr>
+          )))
+        }
+        /* newPrice.length !== 0 ? 
         informationTable = (
           newPrice.map( (item,index) => (
             <tr key={index}>
               <td>{item.NameServices}</td>
               <td>{item.Price}</td>
             </tr>
-          ))
-         )
+        )))
+        : informationTable = null */
       }
         return(
           <>
