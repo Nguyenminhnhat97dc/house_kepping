@@ -284,7 +284,7 @@ class StaffLogin extends React.PureComponent {
     })
   }
   SocketServiceOfProvider = () =>{
-    var ws = new WebSocket("ws://secure-journey-86451.herokuapp.com/provider/services")
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/provider/services")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -316,7 +316,7 @@ class StaffLogin extends React.PureComponent {
      
   }
   SocketRequirementCustomer = () =>{
-    var socket = new WebSocket("ws://secure-journey-86451.herokuapp.com/requirementcustomer")
+    var socket = new WebSocket("wss://secure-journey-86451.herokuapp.com/requirementcustomer")
     socket.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -362,7 +362,7 @@ class StaffLogin extends React.PureComponent {
   }
 
   SocketTodoList = () =>{
-    var ws = new WebSocket("ws://secure-journey-86451.herokuapp.com/todolist")
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/todolist")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -406,7 +406,7 @@ class StaffLogin extends React.PureComponent {
   }
 
   SocketHistoryList = () =>{
-    var ws = new WebSocket("ws://secure-journey-86451.herokuapp.com/history")
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/history")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
