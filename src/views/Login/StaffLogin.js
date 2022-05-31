@@ -61,8 +61,80 @@ class StaffLogin extends React.PureComponent {
     this.SocketTodoList = this.SocketTodoList.bind(this)
     this.SocketHistoryList = this.SocketHistoryList.bind(this)
     this.addMessage = this.addMessage.bind(this)
+    this.handleOnclickNext = this.handleOnclickNext.bind(this)
+    this.handleOnclickPrevious = this.handleOnclickPrevious.bind(this)
   }
-
+  handleOnclickNext = (value) => {
+    switch(value) {
+      case "TodoList":
+        if(this.state.countPaginationTodoList > this.state.currentPaginationTodoList) {
+          /* const check = document.querySelector(".pagination .active")
+          if (check != null){
+            check.className = " "
+          }
+          event.target.className = "active" */
+          var currentPagination = this.state.currentPaginationTodoList + 1
+          this.setState({
+            ...this.setState,
+            currentPaginationTodoList : currentPagination
+          })
+        }
+        break;
+      case "Requirement":
+        if(this.state.countPaginationRequirement > this.state.currentPaginationRequirement){
+          var currentPagination1 = this.state.currentPaginationRequirement + 1
+          this.setState({
+            ...this.setState,
+            currentPaginationRequirement : currentPagination1
+          })
+        }
+        break;
+      case "History":
+        if(this.state.countPaginationHistory > this.state.currentPaginationHistory){
+          var currentPagination2 = this.state.currentPaginationHistory + 1
+          this.setState({
+            ...this.setState,
+            currentPaginationHistory : currentPagination2
+          })
+        }
+      break;
+      default:
+        break;
+    }
+  }
+  handleOnclickPrevious = (value) => {
+    switch(value) {
+      case "TodoList":
+        if(this.state.currentPaginationTodoList > 1) {
+          var currentPagination = this.state.currentPaginationTodoList - 1
+          this.setState({
+            ...this.setState,
+            currentPaginationTodoList : currentPagination
+          })
+        }
+        break;
+      case "Requirement":
+        if(this.state.currentPaginationRequirement > 1){
+          var currentPagination1 = this.state.currentPaginationRequirement - 1
+          this.setState({
+            ...this.setState,
+            currentPaginationRequirement : currentPagination1
+          })
+        }
+        break;
+      case "History":
+        if(this.state.currentPaginationHistory > 1){
+          var currentPagination2 = this.state.currentPaginationHistory - 1
+          this.setState({
+            ...this.setState,
+            currentPaginationHistory : currentPagination2
+          })
+        }
+      break;
+      default:
+        break;
+    }
+  }
   handleOnclickOpen = (name) => {
     const table = document.getElementById(name);
     table.style.display = "block";
@@ -212,7 +284,7 @@ class StaffLogin extends React.PureComponent {
     })
   }
   SocketServiceOfProvider = () =>{
-    var ws = new WebSocket("ws://localhost:8080/provider/services")
+    var ws = new WebSocket("ws://secure-journey-86451.herokuapp.com/provider/services")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -244,7 +316,7 @@ class StaffLogin extends React.PureComponent {
      
   }
   SocketRequirementCustomer = () =>{
-    var socket = new WebSocket("ws://localhost:8080/requirementcustomer")
+    var socket = new WebSocket("ws://secure-journey-86451.herokuapp.com/requirementcustomer")
     socket.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -256,9 +328,12 @@ class StaffLogin extends React.PureComponent {
     socket.onmessage = (res) => {
       const valuesArray = JSON.parse(res.data);
       var dataPagination = []
-      var start = 7 * (this.state.currentPaginationRequirement-1)
+      let start = 7 * (this.state.currentPaginationRequirement-1)
+      if(start > 0){
+        start = start + (this.state.currentPaginationRequirement-1) 
+      }
       var end
-      start === 0 ? end = 7 : end = start * 2
+      start === 0 ? end = 7 : end = start + 7
 
       for (var i= start; i<= end ;i++ )
         if(valuesArray[i]){
@@ -287,7 +362,7 @@ class StaffLogin extends React.PureComponent {
   }
 
   SocketTodoList = () =>{
-    var ws = new WebSocket("ws://localhost:8080/todolist")
+    var ws = new WebSocket("ws://secure-journey-86451.herokuapp.com/todolist")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -303,7 +378,10 @@ class StaffLogin extends React.PureComponent {
      ws.onmessage = (res) => {
       const valuesArray = JSON.parse(res.data);
       var dataPagination = []
-      var start = 7 * (this.state.currentPaginationTodoList -1)
+      let start = 7 * (this.state.currentPaginationTodoList -1)
+      if(start > 0){
+        start = start + (this.state.currentPaginationRequirement-1) 
+      }
       var end
       start === 0 ? end = 7 : end = start * 2
 
@@ -328,7 +406,7 @@ class StaffLogin extends React.PureComponent {
   }
 
   SocketHistoryList = () =>{
-    var ws = new WebSocket("ws://localhost:8080/history")
+    var ws = new WebSocket("ws://secure-journey-86451.herokuapp.com/history")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -344,7 +422,10 @@ class StaffLogin extends React.PureComponent {
      ws.onmessage = (res) => {
       const valuesArray = JSON.parse(res.data);
       var dataPagination = []
-      var start = 7 * (this.state.currentPaginationHistory-1)
+      let start = 7 * (this.state.currentPaginationHistory-1)
+      if(start > 0){
+        start = start + (this.state.currentPaginationRequirement-1) 
+      }
       var end
       start === 0 ? end = 7 : end = start * 2
 
@@ -588,10 +669,10 @@ class StaffLogin extends React.PureComponent {
         <div className="tablejob-1" id="tablejob-1"> <TableJob typeTable={"requirementcustomer"} addTableHead={ this.state.headTableJob.head} addTableBody={ this.state.headTableJob.body} /></div>
         <div className="center">
           <div className="pagination">
-              <div>&laquo;</div>
+              <div onClick={()=> this.handleOnclickPrevious("Requirement")}>&laquo;</div>
               <div className="active" onClick={this.handleOnclickPagination}>1</div>
               {showPaginationRequirement}
-              <div >&raquo;</div>
+              <div onClick={()=> this.handleOnclickNext("Requirement")}>&raquo;</div>
           </div>
         </div>
       </>)
@@ -603,10 +684,10 @@ class StaffLogin extends React.PureComponent {
         )
         pagination1 = (
           <div className="pagination">
-            <div >&laquo;</div>
+            <div onClick={()=> this.handleOnclickPrevious("TodoList")}>&laquo;</div>
             <div className="active" onClick={this.handleOnclickPaginationToDoList}>1</div>
             {showPaginationTodoList}
-            <div >&raquo;</div>
+            <div onClick={()=> this.handleOnclickNext("TodoList")}>&raquo;</div>
           </div>
         )
       }else{
@@ -624,10 +705,10 @@ class StaffLogin extends React.PureComponent {
       )
       pagination2 = (
         <div className="pagination">
-          <div >&laquo;</div>
+          <div onClick={()=> this.handleOnclickPrevious("History")}>&laquo;</div>
           <div className="active" onClick={this.handleOnclickPaginationHistory}>1</div>
           {showPaginationHistory}
-          <div >&raquo;</div>
+          <div onClick={()=> this.handleOnclickNext("History")}>&raquo;</div>
         </div>
       )
     }else{
