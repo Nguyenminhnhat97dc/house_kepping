@@ -286,8 +286,8 @@ class StaffLogin extends React.PureComponent {
     })
   }
   SocketServiceOfProvider = () =>{
-    //var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/provider/services")
-    var ws = new WebSocket("ws://localhost:8080/provider/services")
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/provider/services")
+    //var ws = new WebSocket("ws://localhost:8080/provider/services")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -319,8 +319,8 @@ class StaffLogin extends React.PureComponent {
      
   }
   SocketRequirementCustomer = () =>{
-    //var socket = new WebSocket("wss://secure-journey-86451.herokuapp.com/requirementcustomer")
-    var socket = new WebSocket("ws://localhost:8080/requirementcustomer")
+    var socket = new WebSocket("wss://secure-journey-86451.herokuapp.com/requirementcustomer")
+    //var socket = new WebSocket("ws://localhost:8080/requirementcustomer")
     socket.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -366,8 +366,8 @@ class StaffLogin extends React.PureComponent {
   }
 
   SocketTodoList = () =>{
-    //var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/todolist")
-    var ws = new WebSocket("ws://localhost:8080/todolist")
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/todolist")
+    //var ws = new WebSocket("ws://localhost:8080/todolist")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -411,8 +411,8 @@ class StaffLogin extends React.PureComponent {
   }
 
   SocketHistoryList = () =>{
-    //var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/history")
-    var ws = new WebSocket("ws://localhost:8080/history")
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/history")
+    //var ws = new WebSocket("ws://localhost:8080/history")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -455,8 +455,8 @@ class StaffLogin extends React.PureComponent {
      };
   }
   SocketPaginationRequirement = () =>{
-    //var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/paginationrequirement")
-    var ws = new WebSocket("ws://localhost:8080/paginationrequirement")
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/paginationrequirement")
+    //var ws = new WebSocket("ws://localhost:8080/paginationrequirement")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
