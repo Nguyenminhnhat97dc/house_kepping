@@ -283,7 +283,7 @@ class StaffLogin extends React.PureComponent {
     })
   }
   SocketServiceOfProvider = () =>{
-    var ws = new WebSocket("ws://secure-journey-86451.herokuapp.com/provider/services")
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/provider/services")
     //var ws = new WebSocket("ws://localhost:8080/provider/services")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
@@ -316,7 +316,7 @@ class StaffLogin extends React.PureComponent {
      
   }
   SocketRequirementCustomer = () =>{
-    var socket = new WebSocket("ws://secure-journey-86451.herokuapp.com/requirementcustomer")
+    var socket = new WebSocket("wss://secure-journey-86451.herokuapp.com/requirementcustomer")
     //var socket = new WebSocket("ws://localhost:8080/requirementcustomer")
     socket.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
