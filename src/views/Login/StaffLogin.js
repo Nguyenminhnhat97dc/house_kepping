@@ -245,7 +245,7 @@ class StaffLogin extends React.PureComponent {
 
   handleOnclickPaginationToDoList = (event) =>{
     const check = document.querySelector(".pagination .active")
-    if (check != null){
+    if (check.length > 0){
       check[0].className = " "
     }
     event.target.className = "active"
