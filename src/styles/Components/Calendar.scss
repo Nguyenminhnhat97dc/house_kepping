@@ -37,7 +37,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-    
+                margin-right: 30px;
                 .year-change{
                     height: 40px;
                     width: 40x;
@@ -73,7 +73,7 @@
                 grid-template-columns: repeat(7, 1fr);
                 gap: 3px;
                 color: #f8fbff;
-                
+                user-select: none !important;
     
                 .dayy:hover{
                     background-color: #e26e78;

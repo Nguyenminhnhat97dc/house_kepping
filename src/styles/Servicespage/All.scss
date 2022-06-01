@@ -167,7 +167,9 @@
             height: 40px;
             border-radius: 10px;
             padding-left: 10px;
-            padding-right: 10px;
+            padding-right: 50px;
+            overflow: hidden;
+            text-overflow: ellipsis;
             border: 2px solid white;
             color: #081c15;
             background-color: #edf2f4;
@@ -177,6 +179,7 @@
         }
         form input:last-child{
             margin-bottom: 30px;
+            padding-right: 10px !important;
             font-size: inherit;
         }
         form {
@@ -224,17 +227,18 @@
     .information-customer-footer{
         padding-bottom: 20px;
 
-        button{
+        button.sendd{
             display: block;
             margin-left: auto;
             margin-right: auto;
             width: 150px;
+            height: 35px;
             border-radius: 20px;
             background-color: #ffc8dd;
             border: 2px solid #ffc8dd;
         }
 
-        button:hover{
+        button.sendd:hover{
             background-color: #ffafcc;
             border: 2px solid #ffafcc;
         }

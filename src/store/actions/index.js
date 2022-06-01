@@ -20,3 +20,9 @@ export const actFetchServices = (services) => {
         services
     }
 }
+export const actAddDayStart = (daystart) =>{
+    return{
+        type : Types.ADD_DAYSTART,
+        daystart
+    }
+}

@@ -1,6 +1,8 @@
 import React from "react";
 import "../../styles/Components/Calendar.scss";
-import { FcPrevious, FcNext } from "react-icons/fc";
+//import { FcPrevious, FcNext } from "react-icons/fc";
+import { connect } from "react-redux";
+import { actAddDayStart } from "../../store/actions/index"
 class Calendar extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -15,7 +17,22 @@ class Calendar extends React.PureComponent {
       getFebDays: 28,
       arrayDayOfMonth: [],
       dayOfMonth: [],
-      saveIndex :[]
+      saveIndex :[],
+      saveIndexYear : [],
+      saveIndexAnother : [],
+      dayStart : [],
+      1 :[],
+      2 :[],
+      3 :[],
+      4 :[],
+      5 :[],
+      6 :[],
+      7 :[],
+      8 :[],
+      9 :[],
+      10 :[],
+      11 :[],
+      12 :[],
     };
 
     this.handleOnclickShow = this.handleOnclickShow.bind(this);
@@ -27,6 +44,7 @@ class Calendar extends React.PureComponent {
     this.handleChange = this.handleChange.bind(this)
     this.handleOnclickMonthPicker = this.handleOnclickMonthPicker.bind(this)
     this.handleOnclickYear = this.handleOnclickYear.bind(this)
+    this.handleOnClickDay = this.handleOnClickDay.bind(this)
   }
 
   handleOnclickShow = () => {
@@ -43,7 +61,47 @@ class Calendar extends React.PureComponent {
     // Update component state whenever the data source changes
 
   }
+  handleOnClickDay = (event,value) =>{
 
+    var name = event.target.className
+    var index = parseInt(event.target.id)
+    const currentMonth = document.querySelector(".month")
+    const currentYear = document.querySelector(".year")
+    const current = new Date();
+    const date = current.getDate();
+    const month = current.getMonth() + 1 ;
+    //const year = current.getFullYear();
+    const monthInt = parseInt(currentMonth.innerHTML.slice(6))
+    if(event.target.textContent === "0" || 
+          (parseInt(event.target.textContent) < date && monthInt === month ) ||
+          monthInt < month){
+          return null
+    }
+    else
+    {
+      if(name === "dayy"){
+        event.target.className = "dayy active"
+        let currentDayStart = " "+event.target.innerText+"/"+currentMonth.innerText.slice(6)+"/"+currentYear.innerText
+        this.setState({
+          ...this.state,
+          dayStart : [...this.state.dayStart, currentDayStart],
+          [monthInt] : [...this.state[monthInt], index]
+        })
+      
+      }else{
+        event.target.className = "dayy"
+        var deleteDay = " "+event.target.innerText+"/"+currentMonth.innerText.slice(6)+"/"+currentYear.innerText
+        let dayStartCurrent = this.state[monthInt].filter( item => item !== index )
+        let dayStartCurrent1 = this.state.dayStart.filter( item => item !== deleteDay )
+        this.setState({
+          ...this.state,
+          dayStart : dayStartCurrent1,
+          [monthInt] : dayStartCurrent
+        })
+      }
+    }
+    
+  }
   // list day of month
   
   showDayOfMonth = () => {
@@ -105,52 +163,89 @@ class Calendar extends React.PureComponent {
   handleOnclickMonthPicker = (event) => {
     //const dayActive = document.querySelectorAll(".dayy.active")
     const dayActives = document.querySelectorAll(".dayy")
-    const current = new Date();
-    const month = current.getMonth() + 1 ;
-    let arrIndex = []
-    if(month !== parseInt(event.target.innerText.slice(6))){
+    const currentMonth = document.querySelector(".month")
+    const monthInt = parseInt(currentMonth.innerHTML.slice(6))
+    //const current = new Date();
+    //const month = current.getMonth() + 1 ;
+    //let arrIndexMonthAnother = []
+    /* if(month !== parseInt(event.target.innerText.slice(6)) ){
       dayActives.forEach((dayActive,index) =>{
         if(dayActive.className === "dayy active"){
-          console.log(index)
-          arrIndex.push(index)
+          dayActive.className = "dayy"
+          arrIndexMonthAnother.push(index)
           this.setState({
             ...this.state,
-            saveIndex : arrIndex
+            saveIndex : arrIndexMonthAnother
           })
-          dayActive.className = "dayy"
+        }})
+        if(this.state.saveIndexAnother.length > 0){
+          this.state.saveIndexAnother.forEach((index) => {
+            console.log(">>>>Đếm Số",index)
+            dayActives[index].className += " active"
+          })
         }
-      })
     }
     if(month === parseInt(event.target.innerText.slice(6)) && this.state.saveIndex.length > 0){
-      console.log(this.state)
       this.state.saveIndex.forEach((index) => {
         dayActives[index].className = "dayy active"
       })
+      if(this.state.saveIndexAnother.length > 0){
+        this.state.saveIndexAnother.forEach((index) => {
+          dayActives[index].className = "dayy"
+        })
+      }
+    } */
+    dayActives.forEach((dayActive) =>{
+      if(dayActive.className === "dayy active"){
+        dayActive.className = "dayy"
+        /* arrIndexMonthAnother.push(index)
+        this.setState({
+          ...this.state,
+          [monthInt] : arrIndexMonthAnother
+        }) */
+      }})
+      if(this.state[monthInt].length > 0){
+        this.state[monthInt].forEach((index) => {
+          console.log(">>>>Đếm Số",index)
+          dayActives[index].className += " active"
+        })
     }
   }
   handleOnclickYear = (value) =>{
     const dayActives = document.querySelectorAll(".dayy")
     const current = new Date();
     const year = current.getFullYear();
-
-    let arrIndex = []
-    if(year !== parseInt(value)){
+    console.log(typeof(value),typeof(year))
+    //let arrIndex = []
+    if(year !== value){
       dayActives.forEach((dayActive,index) =>{
         if(dayActive.className === "dayy active"){
-          console.log(index)
-          arrIndex.push(index)
+          //arrIndex.push(index)
+          //console.log(arrIndex)
           this.setState({
             ...this.state,
-            saveIndex : arrIndex
+            saveIndexYear : [...this.state.saveIndexYear, index]
           })
           dayActive.className = "dayy"
         }
       })
+      if(this.state.saveIndexAnother.length > 0){
+        this.state.saveIndexAnother.forEach((index) => {
+          console.log(">>>>Đếm Số",index)
+          dayActives[index].className += " active"
+        })
+      }
     }
-    if(year === parseInt(value) && this.state.saveIndex.length > 0){
-      this.state.saveIndex.forEach((index) => {
+    
+    if(year === value && this.state.saveIndex.length > 0){
+      this.state.saveIndexYear.forEach((index) => {
         dayActives[index].className = "dayy active"
       })
+      if(this.state.saveIndexAnother.length > 0){
+        this.state.saveIndexAnother.forEach((index) => {
+          dayActives[index].className = "dayy"
+        })
+      }
     }
   }
   componentDidMount() {
@@ -163,8 +258,8 @@ class Calendar extends React.PureComponent {
   }
 
   
-  componentDidUpdate() {   
-
+  componentDidUpdate() { 
+    this.props.addDayStart(this.state.dayStart)
     // Change Month
     const $$ = document.querySelectorAll.bind(document);
     const monthOfYears = $$(".month-select");
@@ -189,7 +284,7 @@ class Calendar extends React.PureComponent {
     // End Change Month
 
     // Change year
-    const year_changes = document.querySelectorAll(".year-change");
+    /* const year_changes = document.querySelectorAll(".year-change");
     const curentYear = document.querySelector(".year");
     year_changes.forEach((year_change, index) => {
       year_change.onclick = function () {
@@ -212,8 +307,33 @@ class Calendar extends React.PureComponent {
           function() { this.showDayOfMonth()}
         )
       }
-    };
+    }; */
     // End change year
+
+/*  const dayActives = document.querySelectorAll(".dayy")
+    const currentMonth = document.querySelector(".month")
+    const current = new Date();
+    const month = current.getMonth() + 1 ;
+    if(parseInt(currentMonth.innerHTML.slice(6)) > month){
+      dayActives.forEach((dayActive,index) =>{
+        dayActive.onclick = () =>{
+          if(dayActive.className === "dayy"){
+            dayActive.className = "dayy active"
+            this.setState({
+              ...this.state,
+              saveIndexAnother : [...this.state.saveIndexAnother, index]
+            })
+          }else{
+            let newIndex = this.state.saveIndexAnother
+             newIndex = newIndex.filter(item => item !== index)
+             this.setState({
+               ...this.state,
+               saveIndexAnother : newIndex
+             })
+          }
+        }
+      })
+    } */
 
   }
 
@@ -227,11 +347,10 @@ class Calendar extends React.PureComponent {
 
 
   render() {
-
     var dayOfMonth = [];
     for (var i = 0; i < this.state.dayOfMonth.length; i++) {
       dayOfMonth.push(
-        <div className="dayy" key={i}>
+        <div className="dayy" key={i} id={i} onClick={(event)=> this.handleOnClickDay(event)}>
           {this.state.dayOfMonth[i]}
         </div>
       );
@@ -245,10 +364,10 @@ class Calendar extends React.PureComponent {
             <div className="month" onClick={() => this.handleOnclickShow()}>
               Tháng {this.state.month}
             </div>
-            <div className="year" >
-              <FcPrevious className="year-change" onClick={ this.handleOnclickYear(this.state.year)}/>
+            <div className="year">
+              {/* <FcPrevious className="year-change" /> */}
               {this.state.year}
-              <FcNext className="year-change" onClick={this.handleOnclickYear(this.state.year)}/>
+              {/* <FcNext className="year-change" /> */}
             </div>
           </div>
           <div className="calendar-body">
@@ -285,4 +404,18 @@ class Calendar extends React.PureComponent {
   }
 }
 
-export default Calendar;
+const mapStateToProps = (state) =>{
+  return{
+    dayStart : state.dayStart
+  }
+}
+
+const mapDispatchToProps = (dispatch) =>{
+  return{
+      addDayStart : (dayStart) =>{
+        dispatch(actAddDayStart(dayStart))
+      },
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Calendar);

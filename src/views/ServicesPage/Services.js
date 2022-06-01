@@ -1,4 +1,4 @@
-import { Component, React } from "react";
+import {  PureComponent, React } from "react";
 import { connect } from "react-redux";
 import "../../styles/Servicespage/All.scss";
 //import DataServices from "../../assets/Data/Services";
@@ -13,7 +13,7 @@ import Nav from "../../Components/Header/Nav";
 import Calendar from "../../Components/Calendar/Calendar ";
 import callApi from "../../utils/apiCaller";
 import { nhapChu, nhapSo } from "../../Components/Function";
-class Services extends Component {
+class Services extends PureComponent {
   constructor(props){
     super(props);
     this.state = {
@@ -90,28 +90,31 @@ class Services extends Component {
 
     handleOnChangeInformation = (event) =>{
       const value = event.target.value
-      this.setState({
+      if( event.target.name !== "dayStart"){
+        this.setState({
         ...this.state,
         informationCustomer:{
           ...this.state.informationCustomer,
           [event.target.name] : value
-        }
-      })
+        }})
+      }
     }
 
     handleOnClickAddRequirement = () =>{
-      if(this.state.informationCustomer.listjob.length > 0 && this.state.informationCustomer.addessCustomer !== "" && this.state.informationCustomer.dayStart !==""
+      if(this.state.informationCustomer.listjob.length > 0 && this.state.informationCustomer.addessCustomer !== "" && this.props.dayStart !==""
       && this.state.informationCustomer.nameCustomer !=="" && this.state.informationCustomer.phoneCustomer !=="" && this.state.informationCustomer.timeStart !==""){
         let nameServices = this.state.informationCustomer.listjob
-        let dayStart = this.state.informationCustomer.dayStart
+        let dayStart = this.props.dayStart
         let services = ""
         for ( var i = 0; i< nameServices.length; i++){
           services = services + ", " + nameServices[i]
         }
         let daystart = ""
         for ( i = 0; i< dayStart.length; i++){
-          daystart = daystart + ", " + dayStart[i]
+          daystart = daystart + "," + dayStart[i]
         }
+        console.log(services)
+        console.log(daystart)
         callApi("requirement","POST",{
         Name : this.state.informationCustomer.nameCustomer,
         Address : this.state.informationCustomer.addressCustomer,
@@ -121,6 +124,7 @@ class Services extends Component {
         TimeStart : this.state.informationCustomer.timeStart
         }).then(res =>{
           this.notifySuccess()
+          document.getElementById("Information").style.color = "black"
         })
       }else{
         this.notifyFail()
@@ -168,22 +172,24 @@ class Services extends Component {
       })
     }
     componentDidUpdate(){
+      
     // Activeclass current Day
 
-    const dayActives = document.querySelectorAll(".dayy")
+/*     const dayActives = document.querySelectorAll(".dayy")
     const currentMonth = document.querySelector(".month")
     const currentYear = document.querySelector(".year")
     const current = new Date();
     const date = current.getDate();
     const month = current.getMonth() + 1 ;
-    const year = current.getFullYear();
+    const year = current.getFullYear(); */
     //const removeActive = document.querySelectorAll(".dayy.active") 
-    dayActives.forEach((dayActive) => {
-
+/*     dayActives.forEach((dayActive) => {
+      
       dayActive.onclick = () => {
+        console.log(dayActive.className)
         if(dayActive.textContent === "0" || 
-        (parseInt(dayActive.textContent) < date && parseInt(currentMonth.textContent) < month ) ||
-         parseInt(currentYear.textContent) < year ){
+          (parseInt(dayActive.textContent) < date && parseInt(currentMonth.innerHTML.slice(6)) === month ) ||
+          parseInt(currentMonth.innerHTML.slice(6)) < month){
           return null
         }else{
           if(dayActive.className === "dayy active"){
@@ -213,24 +219,11 @@ class Services extends Component {
         }
         
       }
-      /* if (dayActive.innerText === date.toString() &&
-            currentMonth.innerText.slice(6) === month.toString() &&
-              year.toString() === currentYear.innerText
-      ){
-          dayActive.className += " active";
-      } 
-      if( dayActive.innerText !== date.toString() ||
-           currentMonth.innerText.slice(6) !== month.toString() &&          
-           removeActive !== null 
-           ){
-            removeActive[i].classList.remove("active")
-      } */
-    });
+    }); */
 
     // End ActiveClass currentDay
     }
   render() {
-    //console.log(this.state)
     return (
       <>
       <Nav />
@@ -277,7 +270,7 @@ class Services extends Component {
                         value={this.state.informationCustomer.phoneCustomer} 
                         onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                       <span>
-                        <input placeholder="Ngày" name="dayStart" value={this.state.informationCustomer.dayStart} className="date" disabled onChange={ (event)=> this.handleOnChangeInformation(event)}/>
+                        <input placeholder="Ngày" name="dayStart" value={this.props.dayStart} className="date" disabled onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                         <BiCalendar className="icon" onClick={() => this.handleOnclickOpenCalendar()} />
                       </span>
                       <div className="calendarr-wrapper" id="calendar">
@@ -290,7 +283,7 @@ class Services extends Component {
                     </form>
                   </div>
                   <div className="information-customer-footer">
-                    <button onClick={this.handleOnClickAddRequirement}>Gửi!</button>
+                    <button className="sendd" onClick={this.handleOnClickAddRequirement}>Gửi!</button>
                     <ToastContainer
                       position="top-center"
                       autoClose={1000}
@@ -317,6 +310,7 @@ class Services extends Component {
 const mapStateToProps = (state) => {
   return {
     dataRedux: state.users,
+    dayStart : state.dayStart
   };
 };
 

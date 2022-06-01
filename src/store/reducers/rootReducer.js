@@ -1,7 +1,8 @@
 import * as Types from "../../constants/ActionType";
 var initState = {
     requirement : [],
-    services :[]
+    services :[],
+    dayStart :[]
 }
 
 const rootReducer = (state = initState, action) => {
@@ -14,6 +15,9 @@ const rootReducer = (state = initState, action) => {
             return state
         case Types.FETCH_SERVICES:
             state = {...state, services : action.services}
+            return state
+        case Types.ADD_DAYSTART:
+            state = {...state, dayStart : action.daystart}
             return state
         default: return state
     }

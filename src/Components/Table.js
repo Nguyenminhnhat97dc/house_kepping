@@ -49,7 +49,7 @@ class TableJob extends React.Component {
                 key={index}>
                   <td>{index + 1}</td>
                   <td>{item.NameServices}</td>
-                  <td>{item.Status}</td>
+                  <td>{item.Status === "0" ? "Chưa hoàn thành" : "Hoàn Thành"}</td>
                   <td>{item.DayStart}</td>
                   <td>{item.TimeStart}</td>
                   <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
@@ -70,7 +70,7 @@ class TableJob extends React.Component {
                 key={index}>
                   <td>{index +1}</td>
                   <td>{item.NameServices}</td>
-                  <td>{item.Status}</td>
+                  <td>{item.Status === "0" ? "Chưa hoàn thành" : "Hoàn Thành"}</td>
                   <td>{item.DayStart}</td>
                   <td>{item.TimeStart}</td>
                   <td>{item.DayEnd}</td>
@@ -91,7 +91,7 @@ class TableJob extends React.Component {
               <tr className='table-row' onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
                   <td style={{textAlign: "left"}} id='abcxyzz'>{item.NameServices}</td>
-                  <td id='abcxyzz'>{item.DayStart}</td>
+                  <td style={{textAlign: "left"}} id='abcxyzz'>{item.DayStart}</td>
                   <td id='abcxyzz'>{item.TimeStart}</td>
                   <td id='abcxyzz'>{item.NameCustomer}</td>
                   <td id='abcxyzz'>{item.AddressCustomer}</td>
