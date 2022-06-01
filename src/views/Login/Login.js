@@ -34,14 +34,12 @@ class Login extends React.Component {
 
     handleLoggin() {
        callApi('loggin', 'POST', this.state.typeUserCurrent).then(res =>{
-           console.log(res.data)
             if(res.data.result !== "False") {
                 this.setState({
                     ...[this.state],
                     isloggin : true
                 })
                 //this.props.fetchProvider(res.data)
-                console.log(">>>>>>>ID",res.data.result.ProviderID)
                 localStorage.setItem("ProviderID", res.data.result.ProviderID)
                 localStorage.setItem("loggin","true")
             }else {
@@ -82,7 +80,7 @@ class Login extends React.Component {
                 <form className="form-login">
                     <h2 className="text-center py-3">Đăng Nhập</h2>
                     <input className="false" type="text" placeholder="Địa Chỉ Email" value={this.state.typeUserCurrent.user}  onChange={ (event) =>this.handleChangeValueUser(event) }/>
-                    <input type="password" placeholder="Mật khẩu" value={this.state.typeUserCurrent.password} onChange={ this.handleChangeValuePassword }/>
+                    <input type="password" placeholder="Mật khẩu" value={this.state.typeUserCurrent.password} onChange={ this.handleChangeValuePassword } autoComplete="on"/>
                     <div>
                         <NavLink  to="">Quên Mật khẩu</NavLink>
                         <NavLink  to="" style={ { float:"right"} } className="float-right">Đăng ký</NavLink>

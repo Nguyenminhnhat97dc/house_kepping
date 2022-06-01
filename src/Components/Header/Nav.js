@@ -5,7 +5,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai"
 import { nhapChu, nhapSo } from "../../Components/Function";
 import { connect } from "react-redux";
 import callApi from "../../utils/apiCaller";
-import { toast,ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import {actFetchProvider} from "../../store/actions/index"
 class Nav extends Component {
   constructor(props) {
@@ -52,8 +52,10 @@ class Nav extends Component {
     document.addEventListener('mouseup', function(e) {
       var container = document.getElementById('wrapper-profile');
       var container2 = document.getElementById('table-chinhSua')
-      if (!container.contains(e.target) || !container2.contains(e.target)){
+      if(e){
+        if (!container.contains(e.target) || !container2.contains(e.target)){
           container.style.display = 'none';
+      }
       }
   });
     

@@ -60,6 +60,7 @@ class StaffLogin extends React.PureComponent {
     this.SocketServiceOfProvider = this.SocketServiceOfProvider.bind(this)
     this.SocketTodoList = this.SocketTodoList.bind(this)
     this.SocketHistoryList = this.SocketHistoryList.bind(this)
+    this.SocketPaginationRequirement = this.SocketPaginationRequirement.bind(this)
     this.addMessage = this.addMessage.bind(this)
     this.handleOnclickNext = this.handleOnclickNext.bind(this)
     this.handleOnclickPrevious = this.handleOnclickPrevious.bind(this)
@@ -232,7 +233,8 @@ class StaffLogin extends React.PureComponent {
   });
 
   handleOnclickPagination = (event) =>{
-    const check = document.querySelector(".pagination .active")
+    console.log(event)
+    const check = document.querySelectorAll(".pagination .active")
     if (check.length > 0){
       check[0].className = " "
     }
@@ -244,7 +246,8 @@ class StaffLogin extends React.PureComponent {
   }
 
   handleOnclickPaginationToDoList = (event) =>{
-    const check = document.querySelector(".pagination .active")
+    
+    const check = document.querySelectorAll(".pagination .active")
     if (check.length > 0){
       check[0].className = " "
     }
@@ -283,8 +286,8 @@ class StaffLogin extends React.PureComponent {
     })
   }
   SocketServiceOfProvider = () =>{
-    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/provider/services")
-    //var ws = new WebSocket("ws://localhost:8080/provider/services")
+    //var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/provider/services")
+    var ws = new WebSocket("ws://localhost:8080/provider/services")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -316,8 +319,8 @@ class StaffLogin extends React.PureComponent {
      
   }
   SocketRequirementCustomer = () =>{
-    var socket = new WebSocket("wss://secure-journey-86451.herokuapp.com/requirementcustomer")
-    //var socket = new WebSocket("ws://localhost:8080/requirementcustomer")
+    //var socket = new WebSocket("wss://secure-journey-86451.herokuapp.com/requirementcustomer")
+    var socket = new WebSocket("ws://localhost:8080/requirementcustomer")
     socket.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -363,8 +366,8 @@ class StaffLogin extends React.PureComponent {
   }
 
   SocketTodoList = () =>{
-    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/todolist")
-    //var ws = new WebSocket("ws://localhost:8080/todolist")
+    //var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/todolist")
+    var ws = new WebSocket("ws://localhost:8080/todolist")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -398,7 +401,7 @@ class StaffLogin extends React.PureComponent {
           body: dataPagination/* .slice(0,dataPagination.length-1) */
         }
       })
-      this.props.fetrequirementCustomer(res.data.result)
+      //this.props.fetrequirementCustomer(res.data.result)
       //console.log("SocketTodo",dataPagination)
      };
      //Triggered when connection is closed
@@ -408,8 +411,8 @@ class StaffLogin extends React.PureComponent {
   }
 
   SocketHistoryList = () =>{
-    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/history")
-    //var ws = new WebSocket("ws://localhost:8080/history")
+    //var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/history")
+    var ws = new WebSocket("ws://localhost:8080/history")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -443,8 +446,35 @@ class StaffLogin extends React.PureComponent {
           body: dataPagination/* .slice(0,dataPagination.length-1) */
         }
       })
-      this.props.fetrequirementCustomer(res.data.result)
+      //this.props.fetrequirementCustomer(res.data.result)
       //console.log(">><<<><><><><><><><>",dataPagination)
+     };
+     //Triggered when connection is closed
+     ws.onclose = function (evt) {
+       console.log("Connection closed.");
+     };
+  }
+  SocketPaginationRequirement = () =>{
+    //var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/paginationrequirement")
+    var ws = new WebSocket("ws://localhost:8080/paginationrequirement")
+    ws.addEventListener('error', function (event) {
+      console.log('WebSocket error: ', event);
+    });
+     //Triggered when connection is open
+     ws.onopen = function (evt){
+      console.log("Connection open ...");
+      var obj = {
+        Status : 0
+        };
+      ws.send(JSON.stringify(obj));
+     }
+      //Triggered when a message is received
+     ws.onmessage = (res) => {
+      const valuesArray = JSON.parse(res.data);
+      this.setState({
+        ...this.state,
+        countPaginationRequirement : valuesArray.Count
+      })
      };
      //Triggered when connection is closed
      ws.onclose = function (evt) {
@@ -558,7 +588,7 @@ class StaffLogin extends React.PureComponent {
       }
     })
     // call API paginationRequirement
-    await callApi("paginationrequirement","POST",{Status : 0}).then(res =>{
+    /* await callApi("paginationrequirement","POST",{Status : 0}).then(res =>{
       try {
         if(res.data.result !==null){
           this.setState({
@@ -571,8 +601,8 @@ class StaffLogin extends React.PureComponent {
       } catch (error) {
         alert(error)
       }
-    })
-
+    }) */
+    this.SocketPaginationRequirement()
     // call API paginationTodoList
     await callApi("paginationtodolist","POST",{Status : 0, ProviderId : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
       try {
