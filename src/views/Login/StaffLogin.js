@@ -459,7 +459,6 @@ class StaffLogin extends React.PureComponent {
             body: dataPagination/* .slice(0,dataPagination.length-1) */
           }
         })
-        console.log(">>Số bản ghi", valuesArray.length)
       }
       //this.props.fetrequirementCustomer(res.data.result)
       //console.log("SocketTodo",dataPagination)
@@ -563,7 +562,6 @@ class StaffLogin extends React.PureComponent {
         ...this.state,
         countPaginationTodoList : valuesArray.Count
       })
-      console.log("Số Page", valuesArray)
      };
      ws.onclose = function (evt) {
        console.log("Connection closed SocketPaginationTodoList");

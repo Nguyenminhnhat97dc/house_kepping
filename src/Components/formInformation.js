@@ -51,8 +51,10 @@ class FormInformation extends React.Component{
           if(res.data.result === "True"){
             this.notifySuccess()
             const check = document.querySelectorAll("#form-container")
-            check[0].style.display = "none"
-            check[1].style.display = "none"
+            if(check.length > 0){
+              check[0].style.display = "none"
+              check[1].style.display = "none"
+            }
             document.getElementById("form-container").style.display = "none"
           }else{
             this.notifyFail()
