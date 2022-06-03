@@ -35,7 +35,7 @@ class FormInformation extends React.Component{
               check[0].style.display = "none"
               check[1].style.display = "none"
             }
-            this.notifySuccess()
+            this.notifySuccess("Nhận việc thành công")
           }else{
             this.notifyFail()
           }
@@ -49,7 +49,7 @@ class FormInformation extends React.Component{
       callApi("update_todolist","POST",{ ProviderId : parseInt(localStorage.getItem("ProviderID")), RequirementCustomerId : this.state.content.Id }).then(res =>{
         try {
           if(res.data.result === "True"){
-            this.notifySuccess()
+            this.notifySuccess("Đã hoàn thành công việc")
             const check = document.querySelectorAll("#form-container")
             if(check.length > 0){
               check[0].style.display = "none"
@@ -65,7 +65,7 @@ class FormInformation extends React.Component{
       })
     }
 
-    notifySuccess = () => toast("Thành công", {
+    notifySuccess = (value) => toast(value, {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,

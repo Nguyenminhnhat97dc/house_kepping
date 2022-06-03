@@ -361,7 +361,6 @@ class StaffLogin extends React.PureComponent {
         ...this.state,
         servicesOfProvider : valuesArray
       })
-      console.log(">>>SocketServies",valuesArray)
      };
      //Triggered when connection is closed
      ws.onclose = function (evt) {
