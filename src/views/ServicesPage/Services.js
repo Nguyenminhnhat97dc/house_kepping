@@ -41,7 +41,7 @@ class Services extends PureComponent {
           event.target.className = "select"
         } 
       }
-      console.log(count)
+      
       if(count === 0 ){
         this.setState({ ...[this.state],
           informationCustomer :{
@@ -53,7 +53,7 @@ class Services extends PureComponent {
       } else {
         let currentListjob = this.state.informationCustomer.listjob
         currentListjob = currentListjob.filter( item => item !== event.target.textContent);
-        console.log(">>>>",currentListjob)
+        
         //this.setState({ ...[this.state], listjob: currentListjob})
         this.setState({ ...[this.state],
           informationCustomer :{
@@ -113,8 +113,6 @@ class Services extends PureComponent {
         for ( i = 0; i< dayStart.length; i++){
           daystart = daystart + "," + dayStart[i]
         }
-        console.log(services)
-        console.log(daystart)
         callApi("requirement","POST",{
         Name : this.state.informationCustomer.nameCustomer,
         Address : this.state.informationCustomer.addressCustomer,
@@ -160,7 +158,6 @@ class Services extends PureComponent {
 
   });
     componentDidMount(){
-
       // Call API List Services
       callApi("services","GET").then(res =>{
         if(res.data.result !== null || res.data.result !== "False"){

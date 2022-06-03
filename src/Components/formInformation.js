@@ -30,10 +30,12 @@ class FormInformation extends React.Component{
       callApi("addtodolist","POST",{ ProviderId : parseInt(localStorage.getItem("ProviderID")), RequirementsCustomerId : this.state.content.Id }).then(res =>{
         try {
           if(res.data.result === "True"){
-            this.notifySuccess()
-            if(document.getElementById("form-container")){
-              document.getElementById("form-container").style.display = "none"
+            const check = document.querySelectorAll("#form-container")
+            if(check.length > 1){
+              check[0].style.display = "none"
+              check[1].style.display = "none"
             }
+            this.notifySuccess()
           }else{
             this.notifyFail()
           }
@@ -49,6 +51,7 @@ class FormInformation extends React.Component{
           if(res.data.result === "True"){
             this.notifySuccess()
             const check = document.querySelectorAll("#form-container")
+            check[0].style.display = "none"
             check[1].style.display = "none"
             document.getElementById("form-container").style.display = "none"
           }else{
@@ -118,50 +121,11 @@ class FormInformation extends React.Component{
       }
     }
     render(){
+      let headerTable
       let informationTable
       let information
       let showButton
       if(this.state.typeForm === "requirementcustomer" && typeof(this.props.content) !== "undefined"){
-        //let price = this.state.priceServices
-        //let services = this.state.nameServices
-        //let arrPrice = []
-        /* this.state.nameServices.map( (item) => {
-          return (
-            price = price.filter( itemm => itemm.NameServices !== item)
-
-          )
-        })
-        let newPrice = this.state.priceServices
-        price.map( (item) => {
-          return (
-            newPrice = newPrice.filter( itemm => itemm.NameServices !== item.NameServices)
-
-          )
-        }) */
-        /* for(let i=0; i< this.state.nameServices.length; i++){
-          
-          for( let j =0; j < price.length; j++ ){
-            console.log( i+"---"+this.state.nameServices[i])
-            console.log(j+"---"+price[j].NameServices)
-              //console.log(price[j].NameServices.length = this.state.nameServices[i].length)
-            if(price[j].NameCustomer === this.state.nameServices[i]){
-              console.log(">>>>>>>>Đã bằng")
-              arrPrice.push(price[j])
-              return
-            }
-          }
-        } */
-        /* console.log(">>>>>>>>>>>>>>>>>>Prices",price)
-        console.log(">>>>>>>>>>>>>>>>>>Prices",newPrice)
-        console.log(">>>>>>>>>>>.NameServices",this.state.nameServices)
-        informationTable = (
-         newPrice.map( (item) => (
-           <tr>
-             <td>abc {item.NameServices}</td>
-             <td>xyz {item.Price}</td>
-           </tr>
-         ))
-        ) */
         information = (
           <>
             <div>Họ Tên: {this.state.content.NameCustomer}</div>
@@ -175,6 +139,12 @@ class FormInformation extends React.Component{
         showButton = (
           <button className="nhanviec" onClick={this.handleOnclickReceive}>Nhận việc</button>
         )
+      }else{
+        if(typeof(this.props.content)  === "undefined"){
+          information = (
+            <h3>Công việc đã được người khác nhận!!!</h3>
+          )
+        }
       }
       if(this.props.typeForm === "todoList" && typeof(this.props.content) !== "undefined"){
         information = (
@@ -230,11 +200,19 @@ class FormInformation extends React.Component{
         }
         //console.log("dịch vụ đã có giá",newPrice)
         if(Object.values(newPrice).length > 0){
+          headerTable =(
+            <thead>
+              <tr>
+                <th>Tên dịch vụ</th>
+                <th>Giá tiền</th>
+              </tr>
+            </thead>
+          )
           informationTable = (
             newPrice.map( (item,index) => (
               <tr key={index}>
                 <td>{item.NameServices}</td>
-                <td>{item.Price}</td>
+                <td>{item.Price} VNĐ</td>
               </tr>
           )))
         }
@@ -258,12 +236,7 @@ class FormInformation extends React.Component{
                     <div className="content">
                       {information}
                       <table className="table table-striped" id="myTable">
-                        <thead>
-                          <tr>
-                            <th>Tên dịch vụ</th>
-                            <th>Giá tiền</th>
-                          </tr>
-                        </thead>    
+                        {headerTable}
                         <tbody>
                           {informationTable}        
                         </tbody>

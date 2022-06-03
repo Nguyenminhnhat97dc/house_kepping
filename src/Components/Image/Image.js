@@ -4,10 +4,10 @@ class ImageImport extends React.Component {
     render() {
         return (
             <>
-                {DataImage.map( (item) =>{
+                {DataImage.map( (item,index) =>{
                     return (
                         item.type === this.props.type &&
-                            <img src={item.image} key={item.id}  alt="description"/>
+                            <img src={item.image} key={index}  alt="description"/>
                     )
                 })}
             </>

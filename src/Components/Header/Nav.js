@@ -49,10 +49,10 @@ class Nav extends Component {
         }
       }
     } */
-    document.addEventListener('mouseup', function(e) {
+    document.addEventListener('mouseup',async function(e) {
       var container = document.getElementById('wrapper-profile');
       var container2 = document.getElementById('table-chinhSua')
-      if(e){
+      if(container){
         if (!container.contains(e.target) || !container2.contains(e.target)){
           container.style.display = 'none';
       }

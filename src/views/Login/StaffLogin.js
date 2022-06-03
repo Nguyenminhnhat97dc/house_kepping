@@ -19,7 +19,7 @@ class StaffLogin extends React.PureComponent {
       date: "",
       headTableJob: {
         head: [ "Loại công việc","Ngày bắt đầu","Giờ bắt đầu","Họ tên khách Hàng","Địa chỉ","Nhận việc"],
-        body: []
+        body: [null]
       },
       headrLisstJob: {
         head: [ "STT","Loại công việc","Trạng thái","Ngày bắt đầu","Giờ bắt đầu" ,"Xem"/*,"Địa chỉ","Số điện thoại" */],
@@ -39,7 +39,7 @@ class StaffLogin extends React.PureComponent {
       servicesOfProvider : ["","",""],
       currentPaginationRequirement : 1,
       currentPaginationTodoList : 1,
-      currentPaginationHistory :1
+      currentPaginationHistory :1,
     };
 
     this.handleOnclickOpen = this.handleOnclickOpen.bind(this);
@@ -61,41 +61,63 @@ class StaffLogin extends React.PureComponent {
     this.SocketTodoList = this.SocketTodoList.bind(this)
     this.SocketHistoryList = this.SocketHistoryList.bind(this)
     this.SocketPaginationRequirement = this.SocketPaginationRequirement.bind(this)
+    this.SocketPaginationTodoList = this.SocketPaginationTodoList.bind(this)
+    this.SocketPaginationHistory = this.SocketPaginationHistory.bind(this)
     this.addMessage = this.addMessage.bind(this)
     this.handleOnclickNext = this.handleOnclickNext.bind(this)
     this.handleOnclickPrevious = this.handleOnclickPrevious.bind(this)
   }
   handleOnclickNext = (value) => {
+    let calPagination1
+    let calPagination2
+    let calPagination3
+    calPagination1 = Math.ceil(this.state.countPaginationRequirement/8)
+    calPagination2 = Math.ceil(this.state.countPaginationTodoList/8)
+    calPagination3 = Math.ceil(this.state.countPaginationHistory/8)
+    
     switch(value) {
       case "TodoList":
-        if(this.state.countPaginationTodoList > this.state.currentPaginationTodoList) {
-          /* const check = document.querySelector(".pagination .active")
-          if (check != null){
-            check.className = " "
-          }
-          event.target.className = "active" */
-          var currentPagination = this.state.currentPaginationTodoList + 1
+        if(calPagination2 > this.state.currentPaginationTodoList) {
+         if(this.state.currentPaginationTodoList < 6){
+          const check = document.querySelectorAll(".pagination .todolist")
+          check[this.state.currentPaginationTodoList -1].classList.remove("active")
+          check[this.state.currentPaginationTodoList].classList.add("active")
+          var currentPagination2 = this.state.currentPaginationTodoList + 1
+         }
           this.setState({
             ...this.setState,
-            currentPaginationTodoList : currentPagination
+            currentPaginationTodoList : currentPagination2
           })
         }
         break;
       case "Requirement":
-        if(this.state.countPaginationRequirement > this.state.currentPaginationRequirement){
+        if(calPagination1  > this.state.currentPaginationRequirement){
+          if(this.state.currentPaginationRequirement < 6){
+            console.log(this.state.currentPaginationRequirement)
+            const check = document.querySelectorAll(".pagination .requirement")
+            check[this.state.currentPaginationRequirement -1].classList.remove("active")
+            check[this.state.currentPaginationRequirement].classList.add("active")
+          }
           var currentPagination1 = this.state.currentPaginationRequirement + 1
           this.setState({
             ...this.setState,
             currentPaginationRequirement : currentPagination1
           })
+        }else{
+          return
         }
         break;
       case "History":
-        if(this.state.countPaginationHistory > this.state.currentPaginationHistory){
-          var currentPagination2 = this.state.currentPaginationHistory + 1
+        if(calPagination3 > this.state.currentPaginationHistory){
+          if(this.state.countPaginationHistory < 6){
+          const check = document.querySelectorAll(".pagination .history")
+          check[this.state.currentPaginationHistory -1].classList.remove("active")
+          check[this.state.currentPaginationHistory].classList.add("active")
+          var currentPagination3 = this.state.currentPaginationHistory + 1
+          }
           this.setState({
             ...this.setState,
-            currentPaginationHistory : currentPagination2
+            currentPaginationHistory : currentPagination3
           })
         }
       break;
@@ -104,10 +126,23 @@ class StaffLogin extends React.PureComponent {
     }
   }
   handleOnclickPrevious = (value) => {
+ /*    let calPagination1
+    let calPagination2
+    let calPagination3
+    calPagination1 = Math.ceil(this.state.countPaginationRequirement/8)
+    calPagination2 = Math.ceil(this.state.countPaginationTodoList/8)
+    calPagination3 = Math.ceil(this.state.countPaginationHistory/8) */
     switch(value) {
       case "TodoList":
         if(this.state.currentPaginationTodoList > 1) {
+          const check = document.querySelectorAll(".pagination .todolist")
           var currentPagination = this.state.currentPaginationTodoList - 1
+          if(this.state.currentPaginationTodoList <=6){
+            if(check[this.state.currentPaginationTodoList-1]){
+              check[this.state.currentPaginationTodoList-1].classList.remove("active")
+            }
+            check[currentPagination-1].classList.add("active")
+          }
           this.setState({
             ...this.setState,
             currentPaginationTodoList : currentPagination
@@ -116,7 +151,14 @@ class StaffLogin extends React.PureComponent {
         break;
       case "Requirement":
         if(this.state.currentPaginationRequirement > 1){
+          const check = document.querySelectorAll(".pagination .requirement")
           var currentPagination1 = this.state.currentPaginationRequirement - 1
+          if(this.state.currentPaginationRequirement <= 6){
+            if(check[this.state.currentPaginationRequirement-1]){
+              check[this.state.currentPaginationRequirement-1].classList.remove("active")
+            }
+            check[currentPagination1-1].classList.add("active")
+          }
           this.setState({
             ...this.setState,
             currentPaginationRequirement : currentPagination1
@@ -125,7 +167,14 @@ class StaffLogin extends React.PureComponent {
         break;
       case "History":
         if(this.state.currentPaginationHistory > 1){
+          const check = document.querySelectorAll(".pagination .history")
           var currentPagination2 = this.state.currentPaginationHistory - 1
+          if(this.state.currentPaginationHistory <=6 ){
+            if(check[this.state.currentPaginationHistory-1]){
+              check[this.state.currentPaginationHistory-1].classList.remove("active")
+            }
+            check[currentPagination2-1].classList.add("active")
+          }
           this.setState({
             ...this.setState,
             currentPaginationHistory : currentPagination2
@@ -233,12 +282,12 @@ class StaffLogin extends React.PureComponent {
   });
 
   handleOnclickPagination = (event) =>{
-    console.log(event)
     const check = document.querySelectorAll(".pagination .active")
+    console.log(check)
     if (check.length > 0){
-      check[0].className = " "
+      check[0].className = "requirement"
     }
-    event.target.className = "active"
+    event.target.className = "requirement active"
     this.setState({
       ...this.state,
       currentPaginationRequirement : parseInt(event.target.textContent)
@@ -246,12 +295,12 @@ class StaffLogin extends React.PureComponent {
   }
 
   handleOnclickPaginationToDoList = (event) =>{
-    
     const check = document.querySelectorAll(".pagination .active")
-    if (check.length > 0){
-      check[0].className = " "
+    console.log(check)
+    if (check.length > 1){
+      check[0].className = "todolist"
     }
-    event.target.className = "active"
+    event.target.className = "todolist active"
     this.setState({
       ...this.state,
       currentPaginationTodoList : parseInt(event.target.textContent)
@@ -259,10 +308,12 @@ class StaffLogin extends React.PureComponent {
   }
   handleOnclickPaginationHistory = (event) =>{
     const check = document.querySelectorAll(".pagination .active")
-    if (check.length > 0){
-      check[1].className = " "
+    if (check.length > 1){
+      check[1].className = "requirement "
+    }else{
+      check[0].className = "history "
     }
-    event.target.className = "active"
+    event.target.className = "history active"
     this.setState({
       ...this.state,
       currentPaginationHistory : parseInt(event.target.textContent)
@@ -293,7 +344,7 @@ class StaffLogin extends React.PureComponent {
     });
      //Triggered when connection is open
      ws.onopen = function (evt){
-      console.log("Connection open ...");
+      console.log("Connection open SocketServiceOfProvider");
       var obj = { Id : localStorage.getItem("ProviderID")};
       ws.send(JSON.stringify(obj));
      }
@@ -314,7 +365,7 @@ class StaffLogin extends React.PureComponent {
      };
      //Triggered when connection is closed
      ws.onclose = function (evt) {
-       console.log("Connection closed.");
+       console.log("Connection closed SocketServiceOfProvider.");
      };
      
   }
@@ -326,41 +377,47 @@ class StaffLogin extends React.PureComponent {
     });
      //Triggered when connection is open
     socket.onopen = function (evt){
-      console.log("Connection open ...");
+      console.log("Connection open SocketRequirementCustomer");
      }
       //Triggered when a message is received
     socket.onmessage = (res) => {
-      const valuesArray = JSON.parse(res.data);
-      var dataPagination = []
-      let start = 7 * (this.state.currentPaginationRequirement-1)
-      if(start > 0){
-        start = start + (this.state.currentPaginationRequirement-1) 
-      }
-      var end
-      start === 0 ? end = 7 : end = start + 7
-
-      for (var i= start; i<= end ;i++ )
-        if(valuesArray[i]){
-          dataPagination.push(valuesArray[i])
+      if(res.data.length > 10){
+        const valuesArray = JSON.parse(res.data);
+        var dataPagination = []
+        let start = 7 * (this.state.currentPaginationRequirement-1)
+        if(start > 0){
+          start = start + (this.state.currentPaginationRequirement-1) 
         }
-      this.setState({
-        ...this.state,
-        headTableJob:{
-          head : this.state.headTableJob.head,
-          body: dataPagination/* .slice(0,dataPagination.length-1) */
-        },
-      })
+        var end
+        start === 0 ? end = 7 : end = start + 7
+        for (var i= start; i<= end ;i++ ){
+          if(valuesArray[i]){
+            dataPagination.push(valuesArray[i])
+          }
+        }
+        this.setState({
+          ...this.state,
+          headTableJob:{
+            head : this.state.headTableJob.head,
+            body: dataPagination
+          },
+        })
+      }else{
+        this.setState({
+          ...this.state,
+          headTableJob: {
+            head: [ "Loại công việc","Ngày bắt đầu","Giờ bắt đầu","Họ tên khách Hàng","Địa chỉ","Nhận việc"],
+            body: [null]
+          },
+        })
+      }
+      
       //console.log(">>>SocketRequirememmt",dataPagination)
       this.props.fetrequirementCustomer(res.data.result)
      };
      //Triggered when connection is closed
      socket.onclose = function (evt) {
-       console.log("Connection closed.");
-       socket.onopen = function (evt){
-        console.log("Connection open ...");
-        var obj = { PaginationStart : 0, PaginationEnd : 8};
-        socket.send(JSON.stringify(obj));
-       }
+       console.log("Connection closed. SocketRequirementCustomer");
      };
      
   }
@@ -373,11 +430,11 @@ class StaffLogin extends React.PureComponent {
     });
      //Triggered when connection is open
      ws.onopen = function (evt){
-      console.log("Connection open ...");
+      console.log("Connection open SocketTodoList");
       var obj = {
          Id : localStorage.getItem("ProviderID")
         };
-      ws.send(JSON.stringify(obj));
+        ws.send(JSON.stringify(obj));
      }
       //Triggered when a message is received
      ws.onmessage = (res) => {
@@ -388,7 +445,7 @@ class StaffLogin extends React.PureComponent {
         start = start + (this.state.currentPaginationRequirement-1) 
       }
       var end
-      start === 0 ? end = 7 : end = start * 2
+      start === 0 ? end = 7 : end = start + 7
 
       for (var i = start; i<= end ;i++ )
         if(valuesArray[i]){
@@ -406,7 +463,7 @@ class StaffLogin extends React.PureComponent {
      };
      //Triggered when connection is closed
      ws.onclose = function (evt) {
-       console.log("Connection closed.");
+       console.log("Connection closed SocketTodoList.");
      };
   }
 
@@ -418,11 +475,11 @@ class StaffLogin extends React.PureComponent {
     });
      //Triggered when connection is open
      ws.onopen = function (evt){
-      console.log("Connection open ...");
+      console.log("Connection open SocketHistoryList");
       var obj = {
          Id : localStorage.getItem("ProviderID")
         };
-      ws.send(JSON.stringify(obj));
+        ws.send(JSON.stringify(obj));
      }
       //Triggered when a message is received
      ws.onmessage = (res) => {
@@ -433,7 +490,7 @@ class StaffLogin extends React.PureComponent {
         start = start + (this.state.currentPaginationRequirement-1) 
       }
       var end
-      start === 0 ? end = 7 : end = start * 2
+      start === 0 ? end = 7 : end = start + 7
 
       for (var i= start; i<= end ;i++ )
         if(valuesArray[i]){
@@ -451,7 +508,7 @@ class StaffLogin extends React.PureComponent {
      };
      //Triggered when connection is closed
      ws.onclose = function (evt) {
-       console.log("Connection closed.");
+       console.log("Connection closed SocketHistoryList");
      };
   }
   SocketPaginationRequirement = () =>{
@@ -462,7 +519,7 @@ class StaffLogin extends React.PureComponent {
     });
      //Triggered when connection is open
      ws.onopen = function (evt){
-      console.log("Connection open ...");
+      console.log("Connection open SocketPaginationRequirement");
       var obj = {
         Status : 0
         };
@@ -478,23 +535,66 @@ class StaffLogin extends React.PureComponent {
      };
      //Triggered when connection is closed
      ws.onclose = function (evt) {
-       console.log("Connection closed.");
+       console.log("Connection closed SocketPaginationRequirement");
      };
   }
-  /* shouldComponentUpdate(nextProps, nextState){
-    if(this.state.servicesOfProvider !== nextState.servicesOfProvider ||
-        this.state.headTableJob.body !== nextState.headTableJob.body ||
-        this.state.headrLisstJob.body !== nextState.headrLisstJob.body ||
-        this.state.history.body !== nextState.history.body ||
-        this.state.checkTable !== nextState.checkTable ||
-        this.state.nameServices !== nextState.nameServices ||
-        this.state.Price !== nextState.Price
-      ){
-      console.log("Được render")
-      return true
-    }
-    return false;
-  } */
+  SocketPaginationTodoList = () =>{
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/paginationtodolist")
+    //var ws = new WebSocket("ws://localhost:8080/paginationtodolist")
+    ws.addEventListener('error', function (event) {
+      console.log('WebSocket error: ', event);
+    });
+     //Triggered when connection is open
+     ws.onopen = function (evt){
+      console.log("Connection open SocketPaginationTodoList");
+      var obj = {
+        Status : 0,
+        ProviderId : parseInt(localStorage.getItem("ProviderID"))
+        };
+        ws.send(JSON.stringify(obj));
+     }
+      //Triggered when a message is received
+     ws.onmessage = (res) => {
+      const valuesArray = JSON.parse(res.data);
+      this.setState({
+        ...this.state,
+        countPaginationTodoList : valuesArray.Count
+      })
+     };
+     //Triggered when connection is closed
+     ws.onclose = function (evt) {
+       console.log("Connection closed SocketPaginationTodoList");
+     };
+  }
+  SocketPaginationHistory = () =>{
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/paginationhistory")
+    //var ws = new WebSocket("ws://localhost:8080/paginationhistory")
+    ws.addEventListener('error', function (event) {
+      console.log('WebSocket error: ', event);
+    });
+     //Triggered when connection is open
+     ws.onopen = function (evt){
+      console.log("Connection open SocketPaginationHistory");
+      var obj = {
+        Status : 1,
+        ProviderId : parseInt(localStorage.getItem("ProviderID"))
+        };
+        ws.send(JSON.stringify(obj));
+     }
+      //Triggered when a message is received
+     ws.onmessage = (res) => {
+      const valuesArray = JSON.parse(res.data);
+      this.setState({
+        ...this.state,
+        countPaginationHistory : valuesArray.Count
+      })
+     };
+     //Triggered when connection is closed
+     ws.onclose = function (evt) {
+       console.log("Connection closed SocketPaginationHistory");
+     };
+  }
+
 
   async componentDidMount() {
     const $ = document.querySelector.bind(document);
@@ -604,7 +704,7 @@ class StaffLogin extends React.PureComponent {
     }) */
     this.SocketPaginationRequirement()
     // call API paginationTodoList
-    await callApi("paginationtodolist","POST",{Status : 0, ProviderId : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
+    /* await callApi("paginationtodolist","POST",{Status : 0, ProviderId : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
       try {
         if(res.data.result !==null){
           this.setState({
@@ -617,10 +717,10 @@ class StaffLogin extends React.PureComponent {
       } catch (error) {
         alert(error)
       }
-    })
-
+    }) */
+    this.SocketPaginationTodoList()
     // call API paginationTodoListHistory
-    await callApi("paginationtodolist","POST",{Status : 1, ProviderId : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
+    /* await callApi("paginationtodolist","POST",{Status : 1, ProviderId : parseInt(localStorage.getItem("ProviderID"))}).then(res =>{
       try {
         if(res.data.result !==null){
           this.setState({
@@ -633,8 +733,8 @@ class StaffLogin extends React.PureComponent {
       } catch (error) {
         alert(error)
       }
-    })
-
+    }) */
+    this.SocketPaginationHistory()
     /* await callApi("provider/services","POST", { Id : localStorage.getItem("ProviderID") }).then(res=>{
       try {
         if(res.data.result !== null){
@@ -667,7 +767,7 @@ class StaffLogin extends React.PureComponent {
       calPagination = Math.ceil(this.state.countPaginationRequirement/8)
       for(var i = 2; i<= calPagination; i++){
         showPaginationRequirement.push(
-          <div key={i} onClick={this.handleOnclickPagination}>{i}</div>
+          <div className="requirement" key={i} onClick={this.handleOnclickPagination}>{i}</div>
         )
         if(i === 6){
           break
@@ -678,7 +778,7 @@ class StaffLogin extends React.PureComponent {
       calPagination = Math.ceil(this.state.countPaginationTodoList/8)
       for( i = 2; i<= calPagination; i++){
         showPaginationTodoList.push(
-          <div key={i} onClick={this.handleOnclickPaginationToDoList}>{i}</div>
+          <div className="todolist" key={i} onClick={this.handleOnclickPaginationToDoList}>{i}</div>
         )
         if(i === 6){
           break
@@ -689,7 +789,7 @@ class StaffLogin extends React.PureComponent {
       calPagination = Math.ceil(this.state.countPaginationHistory/8)
       for( i = 2; i<= calPagination; i++){
         showPaginationHistory.push(
-          <div key={i} onClick={this.handleOnclickPaginationHistory}>{i}</div>
+          <div className="history" key={i} onClick={this.handleOnclickPaginationHistory}>{i}</div>
         )
         if(i === 6){
           break
@@ -698,17 +798,25 @@ class StaffLogin extends React.PureComponent {
     }
     let tableShow
     if(this.state.checkTable === "requirementCustomer"){
-      tableShow = (<>
-        <div className="tablejob-1" id="tablejob-1"> <TableJob typeTable={"requirementcustomer"} addTableHead={ this.state.headTableJob.head} addTableBody={ this.state.headTableJob.body} /></div>
-        <div className="center">
-          <div className="pagination">
-              <div onClick={()=> this.handleOnclickPrevious("Requirement")}>&laquo;</div>
-              <div className="active" onClick={this.handleOnclickPagination}>1</div>
-              {showPaginationRequirement}
-              <div onClick={()=> this.handleOnclickNext("Requirement")}>&raquo;</div>
-          </div>
-        </div>
-      </>)
+      if(this.state.headTableJob.body[0] !== null ){
+        tableShow = (
+          <>
+            <div className="tablejob-1" id="tablejob-1"> <TableJob typeTable={"requirementcustomer"} addTableHead={ this.state.headTableJob.head} addTableBody={ this.state.headTableJob.body} /></div>
+            <div className="center">
+              <div className="pagination">
+                  <div onClick={()=> this.handleOnclickPrevious("Requirement")}>&laquo;</div>
+                  <div className="requirement active" onClick={this.handleOnclickPagination}>1</div>
+                  {showPaginationRequirement}
+                  <div onClick={()=> this.handleOnclickNext("Requirement")}>&raquo;</div>
+              </div>
+            </div>
+          </>
+        )
+      }else{
+        tableShow = (
+          <h2> Không có yêu cầu khách hàng </h2>
+        )
+      }
     }
     if(this.state.checkTable === "todoList"){
       if(typeof(this.state.headrLisstJob.body[0]) !== 'string' ){
@@ -718,7 +826,7 @@ class StaffLogin extends React.PureComponent {
         pagination1 = (
           <div className="pagination">
             <div onClick={()=> this.handleOnclickPrevious("TodoList")}>&laquo;</div>
-            <div className="active" onClick={this.handleOnclickPaginationToDoList}>1</div>
+            <div className="todolist active" onClick={this.handleOnclickPaginationToDoList}>1</div>
             {showPaginationTodoList}
             <div onClick={()=> this.handleOnclickNext("TodoList")}>&raquo;</div>
           </div>
@@ -739,7 +847,7 @@ class StaffLogin extends React.PureComponent {
       pagination2 = (
         <div className="pagination">
           <div onClick={()=> this.handleOnclickPrevious("History")}>&laquo;</div>
-          <div className="active" onClick={this.handleOnclickPaginationHistory}>1</div>
+          <div className="history active" onClick={this.handleOnclickPaginationHistory}>1</div>
           {showPaginationHistory}
           <div onClick={()=> this.handleOnclickNext("History")}>&raquo;</div>
         </div>
@@ -752,7 +860,7 @@ class StaffLogin extends React.PureComponent {
       )
     }
     var showServices = []
-    if(typeof(this.props.services) != "undefined"){
+    if(typeof(this.props.services) !== "undefined" && this.props.services !== "False"){
       this.props.services.map((item,index) => (
         showServices.push(
           <div key={index}>
@@ -842,10 +950,7 @@ class StaffLogin extends React.PureComponent {
                   <h2>Giới Thiệu</h2>
                   <div className="col-12">
                     <p>
-                      React makes it painless to create interactive UIs. Design
-                      simple views for each state in your application, and React
-                      will efficiently update and render just the right
-                      components when your data changes.
+                      Phần giới thiệu đang phát triển
                     </p>
                   </div>
                 </div>

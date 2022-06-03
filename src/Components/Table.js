@@ -10,7 +10,7 @@ class TableJob extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          formdata : 0,
+          formdata : null,
           checkShowForm : false,
           Head : []
         }
@@ -31,7 +31,12 @@ class TableJob extends React.Component {
       const abc = document.getElementById("container-report-problem")
       abc.style.display = "block"
     }
-    
+    componentDidMount(){
+      /* const check = document.querySelectorAll("#form-container")
+        if(check[1].style.display === "block"){
+          check[1].style.display = "none"
+        } */
+    }
     shouldComponentUpdate(nextProps){
       if(this.props !== nextProps){
         return true
@@ -48,9 +53,9 @@ class TableJob extends React.Component {
               <tr className='table-row'onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
                   <td>{index + 1}</td>
-                  <td>{item.NameServices}</td>
+                  <td style={{textAlign: "left"}}>{item.NameServices}</td>
                   <td>{item.Status === "0" ? "Chưa hoàn thành" : "Hoàn Thành"}</td>
-                  <td>{item.DayStart}</td>
+                  <td style={{textAlign: "left"}}>{item.DayStart}</td>
                   <td>{item.TimeStart}</td>
                   <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
                   {/* <td>{item.AddressCustomer}</td>
@@ -69,9 +74,9 @@ class TableJob extends React.Component {
               <tr className='table-row'onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
                   <td>{index +1}</td>
-                  <td>{item.NameServices}</td>
+                  <td style={{textAlign: "left"}}>{item.NameServices}</td>
                   <td>{item.Status === "0" ? "Chưa hoàn thành" : "Hoàn Thành"}</td>
-                  <td>{item.DayStart}</td>
+                  <td style={{textAlign: "left"}}>{item.DayStart}</td>
                   <td>{item.TimeStart}</td>
                   <td>{item.DayEnd}</td>
                   <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>

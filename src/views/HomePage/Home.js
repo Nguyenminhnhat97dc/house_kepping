@@ -1,10 +1,10 @@
-import { Component, React } from "react";
+import {  PureComponent, React } from "react";
 //import SliderData from "../../Components/SlideShow/SliderData";
 //import Slideshow from "../../Components/SlideShow/Slideshow";
 import ServicesIntroduce from "./ServicesIntroduce";
 import ServiceBooking from "./ServiceBookingProcess";
 import Nav from "../../Components/Header/Nav";
-class Home extends Component {
+class Home extends PureComponent {
     render() {
         return (
             <>

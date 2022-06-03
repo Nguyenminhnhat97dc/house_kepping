@@ -182,11 +182,18 @@ a {
     }
     .center {
         text-align: center;
-        padding-top: 15px;
+        position: fixed;
+        top: 87%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+        user-select: none !important;
       }
       
       .pagination {
         display: inline-block;
+        
+        
       }
       
       .pagination div {
@@ -382,6 +389,7 @@ table tbody tr td{
     position: fixed;
     background-color: rgba(0,0,0,0.4);
     color: black;
+    z-index: 1;
     .form-wrapper{
         margin: 0;
         position: absolute;
