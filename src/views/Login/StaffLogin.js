@@ -297,7 +297,7 @@ class StaffLogin extends React.PureComponent {
   handleOnclickPaginationToDoList = (event) =>{
     const check = document.querySelectorAll(".pagination .active")
     console.log(check)
-    if (check.length > 1){
+    if (check.length > 0){
       check[0].className = "todolist"
     }
     event.target.className = "todolist active"
@@ -438,26 +438,29 @@ class StaffLogin extends React.PureComponent {
      }
       //Triggered when a message is received
      ws.onmessage = (res) => {
-      const valuesArray = JSON.parse(res.data);
-      var dataPagination = []
-      let start = 7 * (this.state.currentPaginationTodoList -1)
-      if(start > 0){
-        start = start + (this.state.currentPaginationRequirement-1) 
-      }
-      var end
-      start === 0 ? end = 7 : end = start + 7
+      if(res.data.length > 10){
+        const valuesArray = JSON.parse(res.data);
+        var dataPagination = []
+        let start = 7 * (this.state.currentPaginationTodoList -1)
+        if(start > 0){
+          start = start + (this.state.currentPaginationTodoList-1) 
+        }
+        var end
+        start === 0 ? end = 7 : end = start + 7
 
-      for (var i = start; i<= end ;i++ )
-        if(valuesArray[i]){
-          dataPagination.push(valuesArray[i])
-        }
-      this.setState({
-        ...this.state,
-        headrLisstJob:{
-          head : this.state.headrLisstJob.head,
-          body: dataPagination/* .slice(0,dataPagination.length-1) */
-        }
-      })
+        for (var i = start; i<= end ;i++ )
+          if(valuesArray[i]){
+            dataPagination.push(valuesArray[i])
+          }
+        this.setState({
+          ...this.state,
+          headrLisstJob:{
+            head : this.state.headrLisstJob.head,
+            body: dataPagination/* .slice(0,dataPagination.length-1) */
+          }
+        })
+        console.log(">>Số bản ghi", valuesArray.length)
+      }
       //this.props.fetrequirementCustomer(res.data.result)
       //console.log("SocketTodo",dataPagination)
      };
@@ -560,8 +563,8 @@ class StaffLogin extends React.PureComponent {
         ...this.state,
         countPaginationTodoList : valuesArray.Count
       })
+      console.log("Số Page", valuesArray)
      };
-     //Triggered when connection is closed
      ws.onclose = function (evt) {
        console.log("Connection closed SocketPaginationTodoList");
      };
