@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
-import {AiOutlineCheck} from "react-icons/ai"
+import {FiEye } from "react-icons/fi"
+import { BsQuestion } from "react-icons/bs"
+import { HiOutlineBookOpen } from "react-icons/hi"
 /* import { BiAddToQueue } from "react-icons/bi"
 import { RiDeleteBin5Line } from "react-icons/ri"
 import { MdOutlineLibraryBooks } from "react-icons/md" */
@@ -57,7 +59,7 @@ class TableJob extends React.Component {
                   <td>{item.Status === "0" ? "Chưa hoàn thành" : "Hoàn Thành"}</td>
                   <td style={{textAlign: "left"}}>{item.DayStart}</td>
                   <td>{item.TimeStart}</td>
-                  <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
+                  <td><FiEye onClick={ () => this.handleClick(index)}   className='icon-xem' /></td>
                   {/* <td>{item.AddressCustomer}</td>
                   <td>{item.PhoneCustomer}</td> */}
                 </tr>
@@ -79,7 +81,7 @@ class TableJob extends React.Component {
                   <td style={{textAlign: "left"}}>{item.DayStart}</td>
                   <td>{item.TimeStart}</td>
                   <td>{item.DayEnd}</td>
-                  <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
+                  <td><HiOutlineBookOpen onClick={ () => this.handleClick(index)}   className='icon-history' /></td>
                   {/* <td>{item.AddressCustomer}</td>
                   <td>{item.PhoneCustomer}</td> */}
                 </tr>
@@ -100,7 +102,7 @@ class TableJob extends React.Component {
                   <td id='abcxyzz'>{item.TimeStart}</td>
                   <td id='abcxyzz'>{item.NameCustomer}</td>
                   <td id='abcxyzz'>{item.AddressCustomer}</td>
-                  <td><AiOutlineCheck onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
+                  <td><BsQuestion onClick={ () => this.handleClick(index)}   className='icon-accept' /></td>
                 </tr>
             </Fragment>
           ))}

@@ -136,7 +136,7 @@ class Services extends PureComponent {
     }
     
   }
-  notifySuccess = () => toast("Thành công!", {
+  notifySuccess = () => toast("Gửi yêu cầu thành công...!", {
     position: "top-center",
     autoClose: 5000,
     hideProgressBar: false,
@@ -267,7 +267,7 @@ class Services extends PureComponent {
                         value={this.state.informationCustomer.phoneCustomer} 
                         onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                       <span>
-                        <input placeholder="Ngày" name="dayStart" value={this.props.dayStart} className="date" disabled onChange={ (event)=> this.handleOnChangeInformation(event)}/>
+                        <input placeholder="Ngày/tháng/năm, ngày/tháng/năm ..." name="dayStart" value={this.props.dayStart} className="date" disabled onChange={ (event)=> this.handleOnChangeInformation(event)}/>
                         <BiCalendar className="icon" onClick={() => this.handleOnclickOpenCalendar()} />
                       </span>
                       <div className="calendarr-wrapper" id="calendar">
