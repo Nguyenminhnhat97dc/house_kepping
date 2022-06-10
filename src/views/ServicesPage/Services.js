@@ -98,6 +98,10 @@ class Services extends PureComponent {
           [event.target.name] : value
         }})
       }
+      if(event.target.name === "timeStart"){
+        document.querySelector(".information-customer-body").classList.remove("information-customer-body-time")
+        
+      }
     }
 
     handleOnClickAddRequirement = () =>{
@@ -255,7 +259,7 @@ class Services extends PureComponent {
                   <div className="information-customer-header" id="Information">
                     Vui lòng nhập đầy đủ thông tin bên dưới
                   </div>
-                  <div className="information-customer-body">
+                  <div className="information-customer-body information-customer-body-time">
                     <form >
                       <input placeholder="Họ Tên" name="nameCustomer" 
                         onKeyPress={ event => nhapChu(event)}

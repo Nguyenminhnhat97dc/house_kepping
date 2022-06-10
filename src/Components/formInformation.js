@@ -9,7 +9,8 @@ class FormInformation extends React.Component{
           typeForm : "",
           content : {},
           nameServices : [],
-          priceServices : {}
+          priceServices : {},
+          historyInformationServices : []
         }
 
         this.handleOnclickClose = this.handleOnclickClose.bind(this)   
@@ -46,23 +47,56 @@ class FormInformation extends React.Component{
     }
 
     handleOnclickAccept = ()=>{
-      callApi("update_todolist","POST",{ ProviderId : parseInt(localStorage.getItem("ProviderID")), RequirementCustomerId : this.state.content.Id }).then(res =>{
-        try {
-          if(res.data.result === "True"){
-            this.notifySuccess("Đã hoàn thành công việc")
-            const check = document.querySelectorAll("#form-container")
-            if(check.length > 0){
-              check[0].style.display = "none"
-              check[1].style.display = "none"
-            }
-            document.getElementById("form-container").style.display = "none"
-          }else{
-            this.notifyFail()
-          }
-        } catch (error) {
-          alert(error)
+      if((this.state.typeForm === "requirementcustomer" && typeof(this.props.content) !== "undefined") ||
+        (this.props.typeForm === "todoList" && typeof(this.props.content) !== "undefined") ||
+      (this.props.typeForm === "history" && typeof(this.props.content) !== "undefined")
+      ){
+        let price = this.state.priceServices
+        //console.log(">>Dịch vụ chưa có giá",this.state.nameServices)
+        if(Object.values(price).length > 0){
+          this.state.nameServices.map( async(item) => {
+            return (
+              price = await price.filter( itemm => itemm.NameServices !== item)
+            )
+          })
+        }  
+        let newPrice = this.state.priceServices
+        //console.log(">>>",price)
+        if(Object.values(price).length > 0){
+          price.map( async(item) => {
+            return (
+              newPrice = await newPrice.filter( itemm => itemm.NameServices !== item.NameServices)
+            )
+          })
         }
-      })
+        if(Object.values(newPrice).length > 0){
+          callApi("add_historylist","POST",{ 
+              "ProviderId" : parseInt(localStorage.getItem("ProviderID")),
+              "RequirementCustomerId" : this.state.content.Id,
+              "InformationServices" : JSON.stringify(newPrice)
+            }).then(res =>{
+            try {
+              if(res.data.result === "True"){
+                this.notifySuccess("Đã hoàn thành công việc")
+                const check = document.querySelectorAll("#form-container")
+                if(check.length > 0){
+                  check[0].style.display = "none"
+                  check[1].style.display = "none"
+                }
+                document.getElementById("form-container").style.display = "none"
+              }else{
+                this.notifyFail()
+              }
+            } catch (error) {
+              
+            }
+          })
+        }else{
+          alert("Lỗi data vui lòng kiểm tra lại")
+        }
+
+      }
+
     }
 
     notifySuccess = (value) => toast(value, {
@@ -112,7 +146,7 @@ class FormInformation extends React.Component{
       return false;
     }
     componentDidUpdate(){
-      if(typeof(this.props.content) !== "undefined"){
+      if(typeof(this.props.content) !== "undefined" && this.props.typeForm != "history"){
         //console.log(">>>>>>>>>",this.props.content)
         var mystring = this.props.content.NameServices
         this.setState({
@@ -125,6 +159,7 @@ class FormInformation extends React.Component{
     render(){
       let headerTable
       let informationTable
+      let informationTable1
       let information
       let showButton
       if(this.state.typeForm === "requirementcustomer" && typeof(this.props.content) !== "undefined"){
@@ -156,13 +191,20 @@ class FormInformation extends React.Component{
             <div>Số điện thoại: {this.props.content.PhoneCustomer}</div>
             <div>Ngày bắt đầu: {this.props.content.DayStart}</div>
             <div>Giờ bắt đầu: {this.props.content.TimeStart}</div>
-            <div>Trạng thái: {this.props.content.Status === "0" ?  "Chưa Hoàn thành" : "Hoàn Thành"}</div>
+            <div>Trạng thái: Hoàn Thành</div>
             <div>Danh sách dịch vụ</div>
           </>
         )
         showButton = (
           <button className="nhanviec" onClick={this.handleOnclickAccept}>Hoàn thành</button>
         )
+        /* informationTable1 = (
+          newPrice.map( (item,index) => (
+            <tr key={index}>
+              <td>{item.NameServices}</td>
+              <td>{item.Price} VNĐ</td>
+            </tr>
+        ))) */
       }
       if(this.props.typeForm === "history" && typeof(this.props.content) !== "undefined"  ){
         information = (
@@ -179,11 +221,8 @@ class FormInformation extends React.Component{
         )
       }
       if((this.state.typeForm === "requirementcustomer" && typeof(this.props.content) !== "undefined") ||
-        (this.props.typeForm === "todoList" && typeof(this.props.content) !== "undefined") ||
-      (this.props.typeForm === "history" && typeof(this.props.content) !== "undefined")
-      ){
+        (this.props.typeForm === "todoList" && typeof(this.props.content) !== "undefined")){
         let price = this.state.priceServices
-        //console.log(">>Dịch vụ chưa có giá",this.state.nameServices)
         if(Object.values(price).length > 0){
           this.state.nameServices.map( async(item) => {
             return (
@@ -200,7 +239,6 @@ class FormInformation extends React.Component{
             )
           })
         }
-        //console.log("dịch vụ đã có giá",newPrice)
         if(Object.values(newPrice).length > 0){
           headerTable =(
             <thead>
@@ -218,15 +256,18 @@ class FormInformation extends React.Component{
               </tr>
           )))
         }
-        /* newPrice.length !== 0 ? 
-        informationTable = (
-          newPrice.map( (item,index) => (
+        //console.log("dịch vụ đã có giá",JSON.stringify(newPrice))
+      }
+      if (this.props.typeForm === "history" && typeof(this.props.content) !== "undefined"){
+        console.log("đã VÔ")
+        informationTable1 = (
+          JSON.parse(this.props.content.InformationServices).map((item,index) => (
             <tr key={index}>
               <td>{item.NameServices}</td>
-              <td>{item.Price}</td>
+              <td>{item.Price} VNĐ</td>
             </tr>
-        )))
-        : informationTable = null */
+          ))
+        )
       }
         return(
           <>
@@ -240,7 +281,7 @@ class FormInformation extends React.Component{
                       <table className="table table-striped" id="myTable">
                         {headerTable}
                         <tbody>
-                          {informationTable}        
+                          { this.props.typeForm != "history" ? informationTable : informationTable1}        
                         </tbody>
                       </table>
                       {showButton}

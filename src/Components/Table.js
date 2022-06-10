@@ -51,6 +51,7 @@ class TableJob extends React.Component {
         tbody = (
           <tbody>
           { this.props.addTableBody.map((item, index) => (
+            
             <Fragment key={index}>
               <tr className='table-row'onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
@@ -69,6 +70,7 @@ class TableJob extends React.Component {
         )
       }
       if(this.props.typeTable === "history"){
+
         tbody = (
           <tbody>
           { this.props.addTableBody.map((item, index) => (
@@ -76,9 +78,13 @@ class TableJob extends React.Component {
               <tr className='table-row'onDoubleClick={ () => this.handleClick(index)}
                 key={index}>
                   <td>{index +1}</td>
-                  <td style={{textAlign: "left"}}>{item.NameServices}</td>
-                  <td>{item.Status === "0" ? "Chưa hoàn thành" : "Hoàn Thành"}</td>
-                  <td style={{textAlign: "left"}}>{item.DayStart}</td>
+                  <td style={{textAlign: "left"}}>{
+                    JSON.parse(item.InformationServices).map((itemm) =>(
+                      itemm.NameServices + ", "
+                    ))
+                  }</td>
+                  <td>Hoàn Thành</td>
+                  <td style={{textAlign: "center"}}>{item.DayStart}</td>
                   <td>{item.TimeStart}</td>
                   <td>{item.DayEnd}</td>
                   <td><HiOutlineBookOpen onClick={ () => this.handleClick(index)}   className='icon-history' /></td>

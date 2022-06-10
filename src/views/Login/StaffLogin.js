@@ -40,6 +40,10 @@ class StaffLogin extends React.PureComponent {
       currentPaginationRequirement : 1,
       currentPaginationTodoList : 1,
       currentPaginationHistory :1,
+      startPagination : 1,
+      endPagination : 3,
+      startPaginationHistory : 1,
+      endPaginationHistory : 3
     };
 
     this.handleOnclickOpen = this.handleOnclickOpen.bind(this);
@@ -78,12 +82,32 @@ class StaffLogin extends React.PureComponent {
     switch(value) {
       case "TodoList":
         if(calPagination2 > this.state.currentPaginationTodoList) {
-         if(this.state.currentPaginationTodoList < 6){
-          const check = document.querySelectorAll(".pagination .todolist")
-          check[this.state.currentPaginationTodoList -1].classList.remove("active")
-          check[this.state.currentPaginationTodoList].classList.add("active")
+          if(this.state.currentPaginationTodoList < 3){
+            const check = document.querySelectorAll(".pagination .todolist")
+            console.log(check)
+            check[this.state.currentPaginationTodoList -1].classList.remove("active")
+            check[this.state.currentPaginationTodoList].classList.add("active")
+          }else{
+            const check = document.querySelectorAll(".pagination .todolist")
+            if(check[1].className === "todolist active"){
+              check[1].classList.remove("active")
+              check[2].classList.add("active")
+            }else{
+              this.setState({
+                ...this.state,
+                startPagination : this.state.startPagination + 1,
+                endPagination : this.state.endPagination + 1
+              },
+                function () { 
+                  const check = document.querySelectorAll(".pagination .todolist")
+                  console.log(check )
+                  check[1].classList.remove("active")
+                  check[2].classList.add("active")
+                }
+              )
+            }
+          }
           var currentPagination2 = this.state.currentPaginationTodoList + 1
-         }
           this.setState({
             ...this.setState,
             currentPaginationTodoList : currentPagination2
@@ -92,11 +116,28 @@ class StaffLogin extends React.PureComponent {
         break;
       case "Requirement":
         if(calPagination1  > this.state.currentPaginationRequirement){
-          if(this.state.currentPaginationRequirement < 6){
-            console.log(this.state.currentPaginationRequirement)
+          if(this.state.currentPaginationRequirement < 3){
             const check = document.querySelectorAll(".pagination .requirement")
             check[this.state.currentPaginationRequirement -1].classList.remove("active")
             check[this.state.currentPaginationRequirement].classList.add("active")
+          }else{
+            const check = document.querySelectorAll(".pagination .requirement")
+            if(check[1].className === "requirement active"){
+              check[1].classList.remove("active")
+              check[2].classList.add("active")
+            }else{
+              this.setState({
+                ...this.state,
+                startPagination : this.state.startPagination + 1,
+                endPagination : this.state.endPagination + 1
+              },
+                function () { 
+                  const check = document.querySelectorAll(".pagination .requirement")
+                  check[1].classList.remove("active")
+                  check[2].classList.add("active")
+                }
+              )
+            }
           }
           var currentPagination1 = this.state.currentPaginationRequirement + 1
           this.setState({
@@ -109,7 +150,54 @@ class StaffLogin extends React.PureComponent {
         break;
       case "History":
         if(calPagination3 > this.state.currentPaginationHistory){
-          if(this.state.countPaginationHistory < 6){
+
+          if(this.state.currentPaginationHistory < 3){
+            const check = document.querySelectorAll(".pagination .history")
+            console.log(check)
+            if(check[0].className === "history active"){
+              check[0].className = "history"
+              check[1].className = "history active"
+            }else{
+              if(check[1].className === "history active"){
+                check[1].className = "history"
+                check[2].className = "history active"
+              }
+            }
+            /* check[this.state.currentPaginationHistory -1].classList.remove("active")
+            check[this.state.currentPaginationHistory].classList.add("active") */
+          }else{
+            const check = document.querySelectorAll(".pagination .history")
+            if(check[1].className === "history active"){
+              check[1].classList.remove("active")
+              check[2].classList.add("active")
+            }else{
+              this.setState({
+                ...this.state,
+                startPaginationHistory : this.state.startPaginationHistory + 1,
+                endPaginationHistory : this.state.endPaginationHistory + 1
+              },
+                function () { 
+                  const check = document.querySelectorAll(".pagination .history")
+                  check[1].classList.remove("active")
+                  check[2].classList.add("active")
+                }
+              )
+            }
+            if(check[0].className === "history active"){
+              
+              check[0].classList.remove("active")
+              check[1].classList.add("active")
+            }
+          }
+          var currentPagination3 = this.state.currentPaginationHistory + 1
+          this.setState({
+            ...this.setState,
+            currentPaginationHistory : currentPagination3
+          })
+          //var currentPagination3 = this.state.currentPaginationHistory + 1
+          
+
+          /* if(this.state.countPaginationHistory < 3){
           const check = document.querySelectorAll(".pagination .history")
           check[this.state.currentPaginationHistory -1].classList.remove("active")
           check[this.state.currentPaginationHistory].classList.add("active")
@@ -118,7 +206,7 @@ class StaffLogin extends React.PureComponent {
           this.setState({
             ...this.setState,
             currentPaginationHistory : currentPagination3
-          })
+          }) */
         }
       break;
       default:
@@ -126,22 +214,68 @@ class StaffLogin extends React.PureComponent {
     }
   }
   handleOnclickPrevious = (value) => {
- /*    let calPagination1
-    let calPagination2
-    let calPagination3
-    calPagination1 = Math.ceil(this.state.countPaginationRequirement/8)
-    calPagination2 = Math.ceil(this.state.countPaginationTodoList/8)
-    calPagination3 = Math.ceil(this.state.countPaginationHistory/8) */
     switch(value) {
       case "TodoList":
-        if(this.state.currentPaginationTodoList > 1) {
-          const check = document.querySelectorAll(".pagination .todolist")
+        if(this.state.currentPaginationTodoList > 1){
           var currentPagination = this.state.currentPaginationTodoList - 1
-          if(this.state.currentPaginationTodoList <=6){
+          if(this.state.currentPaginationTodoList <= 3 && this.state.endPagination <= 3){
+            const check = document.querySelectorAll(".pagination .todolist")
             if(check[this.state.currentPaginationTodoList-1]){
               check[this.state.currentPaginationTodoList-1].classList.remove("active")
             }
             check[currentPagination-1].classList.add("active")
+          }else{
+            const check = document.querySelectorAll(".pagination .todolist")
+            console.log(this.state.currentPaginationTodoList)
+            if(check[2]){
+              if(check[2].className === "todolist active"){
+                console.log("đã vô")
+                check[2].classList.remove("active")
+                check[1].classList.add("active")
+              }else{
+                if(check[1].className === "todolist active"){
+                  check[1].classList.remove("active")
+                  check[0].classList.add("active")
+                }
+                if(check[0].className === "todolist active"){
+                  this.setState({
+                    ...this.state,
+                  startPagination : this.state.startPagination - 1,
+                  endPagination : this.state.endPagination - 1
+                  },
+                  function () { 
+                    const check = document.querySelectorAll(".pagination .todolist") 
+                    if(check[0].className === "todolist active"){
+                      check[0].classList.remove("active")
+                    }
+                  }
+                  )
+                }
+              }
+            }else{
+              console.log(check)
+              if(check[1].className === "todolist active"){
+                check[1].classList.remove("active")
+                check[0].classList.add("active")
+              }else{
+                check[1].classList.add("active")
+              }
+              if(check[0].className === "todolist active"){
+                this.setState({
+                  ...this.state,
+                startPagination : this.state.startPagination - 1,
+                endPagination : this.state.endPagination - 1
+                },
+                function () { 
+                  const check = document.querySelectorAll(".pagination .todolist") 
+                  if(check[0].className === "todolist active"){
+                    check[0].classList.remove("active")
+                  }
+                }
+                )
+              }
+              
+            }
           }
           this.setState({
             ...this.setState,
@@ -151,13 +285,63 @@ class StaffLogin extends React.PureComponent {
         break;
       case "Requirement":
         if(this.state.currentPaginationRequirement > 1){
-          const check = document.querySelectorAll(".pagination .requirement")
           var currentPagination1 = this.state.currentPaginationRequirement - 1
-          if(this.state.currentPaginationRequirement <= 6){
+          if(this.state.currentPaginationRequirement <= 3 && this.state.endPagination <= 3){
+            const check = document.querySelectorAll(".pagination .requirement")
             if(check[this.state.currentPaginationRequirement-1]){
               check[this.state.currentPaginationRequirement-1].classList.remove("active")
             }
             check[currentPagination1-1].classList.add("active")
+          }else{
+            const check = document.querySelectorAll(".pagination .requirement")
+            if(check[2]){
+              if(check[2].className === "requirement active"){
+                check[2].classList.remove("active")
+                check[1].classList.add("active")
+              }else{
+                if(check[1].className === "requirement active"){
+                  check[1].classList.remove("active")
+                  check[0].classList.add("active")
+                }
+                if(check[0].className === "requirement active"){
+                  this.setState({
+                    ...this.state,
+                  startPagination : this.state.startPagination - 1,
+                  endPagination : this.state.endPagination - 1
+                  },
+                  function () { 
+                    const check = document.querySelectorAll(".pagination .requirement") 
+                    if(check[0].className === "requirement active"){
+                      check[0].classList.remove("active")
+                    }
+                  }
+                  )
+                }
+              }
+            }else{
+              console.log(check)
+              if(check[1].className === "requirement active"){
+                check[1].classList.remove("active")
+                check[0].classList.add("active")
+              }else{
+                check[1].classList.add("active")
+              }
+              if(check[0].className === "requirement active"){
+                this.setState({
+                  ...this.state,
+                startPagination : this.state.startPagination - 1,
+                endPagination : this.state.endPagination - 1
+                },
+                function () { 
+                  const check = document.querySelectorAll(".pagination .requirement") 
+                  if(check[0].className === "requirement active"){
+                    check[0].classList.remove("active")
+                  }
+                }
+                )
+              }
+              
+            }
           }
           this.setState({
             ...this.setState,
@@ -166,14 +350,75 @@ class StaffLogin extends React.PureComponent {
         }
         break;
       case "History":
+
         if(this.state.currentPaginationHistory > 1){
-          const check = document.querySelectorAll(".pagination .history")
           var currentPagination2 = this.state.currentPaginationHistory - 1
-          if(this.state.currentPaginationHistory <=6 ){
+          if(this.state.currentPaginationHistory < 3 && this.state.endPagination <= 3){
+            const check = document.querySelectorAll(".pagination .history")
+            console.log("vô 1")
             if(check[this.state.currentPaginationHistory-1]){
               check[this.state.currentPaginationHistory-1].classList.remove("active")
             }
             check[currentPagination2-1].classList.add("active")
+          }else{
+            const check = document.querySelectorAll(".pagination .history")
+            console.log(check)
+            if(check[2]){
+              if(check[2].className === "history active"){
+                console.log("vô 2")
+                check[2].classList.remove("active")
+                console.log(check[2])
+                check[1].classList.add("active")
+              }else{
+                if(check[1].className === "history active"){
+                  console.log("vô 3")
+                  check[1].classList.remove("active")
+                  check[0].classList.add("active")
+                }
+                if(check[0].className === "history active"){
+                  console.log("đã vô 4")
+                  console.log(check)
+                  this.setState({
+                    ...this.state,
+                  startPaginationHistory : this.state.startPaginationHistory - 1,
+                  endPaginationHistory : this.state.endPaginationHistory - 1
+                  },
+                  function () { 
+                    console.log(this.state.startPagination,this.state.endPagination)
+                    const check = document.querySelectorAll(".pagination .history") 
+                    console.log(check)
+                    if(check[0].className === "history active"){
+                      check[0].classList.remove("active")
+                    }
+                  }
+                  )
+                }
+              }
+            }else{
+              console.log(check)
+              if(check[1].className === "history active"){
+                check[1].classList.remove("active")
+                check[0].classList.add("active")
+              }else{
+                check[1].classList.add("active")
+              }
+              if(check[0].className === "history active"){
+                this.setState({
+                  ...this.state,
+                startPaginationHistory : this.state.startPaginationHistory - 1,
+                endPaginationHistory : this.state.endPaginationHistory - 1
+                },
+                function () { 
+                  //console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
+                  const check = document.querySelectorAll(".pagination .history") 
+                  if(check[0].className === "history active"){
+                    check[0].classList.remove("active")
+                  }
+                }
+                )
+              }
+              
+            }
           }
           this.setState({
             ...this.setState,
@@ -211,7 +456,9 @@ class StaffLogin extends React.PureComponent {
     this.setState({
       ...[this.state],
       checkTable : "requirementCustomer",
-      currentPaginationTodoList : 1
+      currentPaginationTodoList : 1,
+      startPagination : 1,
+      endPagination : 3
     })
   }
 
@@ -221,7 +468,9 @@ class StaffLogin extends React.PureComponent {
     this.setState({
       ...[this.state],
       checkTable : "todoList",
-      currentPaginationRequirement : 1
+      currentPaginationRequirement : 1,
+      startPagination : 1,
+      endPagination : 3
     })
   }
 
@@ -244,7 +493,7 @@ class StaffLogin extends React.PureComponent {
     })
   }
   handleOnclickADD = () =>{
-    callApi("addprice","POST",{ Id: parseInt(localStorage.getItem("ProviderID")), NameServices : this.state.nameServices, Price : parseInt(this.state.Price) }).then(res =>{
+    callApi("addprice","POST",{ "Id": parseInt(localStorage.getItem("ProviderID")), "NameServices" : this.state.nameServices, "Price" : parseInt(this.state.Price) }).then(res =>{
        if(res.data.result === "True" || res.data.result === "Update thành công"){
           this.setState({
             ...[this.state]
@@ -282,7 +531,7 @@ class StaffLogin extends React.PureComponent {
   });
 
   handleOnclickPagination = (event) =>{
-    const check = document.querySelectorAll(".pagination .active")
+    /* const check = document.querySelectorAll(".pagination .active")
     console.log(check)
     if (check.length > 0){
       check[0].className = "requirement"
@@ -291,11 +540,42 @@ class StaffLogin extends React.PureComponent {
     this.setState({
       ...this.state,
       currentPaginationRequirement : parseInt(event.target.textContent)
-    })
+    }) */
+    const check = document.querySelector(".requirement.active")
+    console.log(check)
+    check.className = "requirement"
+    event.target.className = "requirement active"
+    const check1 = document.querySelectorAll(".pagination .requirement")
+    console.log(">>>>>>>",check1)
+    if(check1[0].className === "requirement active"){
+      console.log("đã vô 4")
+      console.log(check)
+      this.setState({
+        ...this.state,
+        currentPaginationRequirement : parseInt(event.target.textContent),
+        startPagination : this.state.startPagination - 1,
+        endPagination : this.state.endPagination - 1
+      },
+      function () { 
+        console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
+        const check2 = document.querySelectorAll(".pagination .requirement") 
+        console.log(check2)
+        if(check2[0].className === "requirement active"){
+          check2[0].classList.remove("active")
+        }
+      }
+      )
+    }else{
+      this.setState({
+        ...this.state,
+        currentPaginationRequirement : parseInt(event.target.textContent)
+      })
+    }
+
   }
 
   handleOnclickPaginationToDoList = (event) =>{
-    const check = document.querySelectorAll(".pagination .active")
+    /* const check = document.querySelectorAll(".pagination .active")
     console.log(check)
     if (check.length > 0){
       check[0].className = "todolist"
@@ -304,23 +584,76 @@ class StaffLogin extends React.PureComponent {
     this.setState({
       ...this.state,
       currentPaginationTodoList : parseInt(event.target.textContent)
-    })
-  }
-  handleOnclickPaginationHistory = (event) =>{
-    const check = document.querySelectorAll(".pagination .active")
-    if (check.length > 1){
-      check[1].className = "requirement "
+    }) */
+
+
+    const check = document.querySelector(".todolist.active")
+    console.log(check)
+    check.className = "todolist"
+    event.target.className = "todolist active"
+    const check1 = document.querySelectorAll(".pagination .todolist")
+    console.log(">>>>>>>",check1)
+    if(check1[0].className === "todolist active"){
+      console.log("đã vô 4")
+      console.log(check)
+      this.setState({
+        ...this.state,
+        currentPaginationTodoList : parseInt(event.target.textContent),
+        startPagination : this.state.startPagination - 1,
+        endPagination : this.state.endPagination - 1
+      },
+      function () { 
+        console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
+        const check2 = document.querySelectorAll(".pagination .todolist") 
+        console.log(check2)
+        if(check2[0].className === "todolist active"){
+          check2[0].classList.remove("active")
+        }
+      }
+      )
     }else{
-      check[0].className = "history "
+      this.setState({
+        ...this.state,
+        currentPaginationTodoList : parseInt(event.target.textContent)
+      })
     }
+
+  }
+  handleOnclickPaginationHistory = async(event) =>{
+    const check = document.querySelector(".history.active")
+    console.log(check)
+    check.className = "history"
     event.target.className = "history active"
-    this.setState({
-      ...this.state,
-      currentPaginationHistory : parseInt(event.target.textContent)
-    })
+    const check1 = document.querySelectorAll(".pagination .history")
+    console.log(">>>>>>>",check1)
+    if(check1[0].className === "history active"){
+      console.log("đã vô 4")
+      console.log(check)
+      this.setState({
+        ...this.state,
+        currentPaginationHistory : parseInt(event.target.textContent),
+        startPaginationHistory : this.state.startPaginationHistory - 1,
+        endPaginationHistory : this.state.endPaginationHistory - 1
+      },
+      function () { 
+        console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
+        const check2 = document.querySelectorAll(".pagination .history") 
+        console.log(check2)
+        if(check2[0].className === "history active"){
+          check2[0].classList.remove("active")
+        }
+      }
+      )
+    }else{
+      this.setState({
+        ...this.state,
+        currentPaginationHistory : parseInt(event.target.textContent)
+      })
+    }
+
   }
   handleDeleteService = (value) =>{
-    callApi("deleteservices","POST",{ ProviderId : parseInt(localStorage.getItem("ProviderID")), ServicesId : value }).then(res=>{
+    callApi("deleteservices","POST",{ "ProviderId" : parseInt(localStorage.getItem("ProviderID")), "ServicesId" : value }).then(res=>{
       try {
         if(res.data.result === "True"){
           this.notifySuccess()
@@ -345,7 +678,7 @@ class StaffLogin extends React.PureComponent {
      //Triggered when connection is open
      ws.onopen = function (evt){
       console.log("Connection open SocketServiceOfProvider");
-      var obj = { Id : localStorage.getItem("ProviderID")};
+      var obj = { "Id" : localStorage.getItem("ProviderID")};
       ws.send(JSON.stringify(obj));
      }
       //Triggered when a message is received
@@ -431,7 +764,7 @@ class StaffLogin extends React.PureComponent {
      ws.onopen = function (evt){
       console.log("Connection open SocketTodoList");
       var obj = {
-         Id : localStorage.getItem("ProviderID")
+         "Id" : localStorage.getItem("ProviderID")
         };
         ws.send(JSON.stringify(obj));
      }
@@ -470,7 +803,7 @@ class StaffLogin extends React.PureComponent {
 
   SocketHistoryList = () =>{
     var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/history")
-    //var ws = new WebSocket("ws://localhost:8080/history")
+    //var ws = new WebSocket("ws://localhost:8080/historyy")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
     });
@@ -478,13 +811,14 @@ class StaffLogin extends React.PureComponent {
      ws.onopen = function (evt){
       console.log("Connection open SocketHistoryList");
       var obj = {
-         Id : localStorage.getItem("ProviderID")
+         "Id" : parseInt(localStorage.getItem("ProviderID"))
         };
         ws.send(JSON.stringify(obj));
      }
       //Triggered when a message is received
      ws.onmessage = (res) => {
       const valuesArray = JSON.parse(res.data);
+      //console.log(">>>>",valuesArray)
       var dataPagination = []
       let start = 7 * (this.state.currentPaginationHistory-1)
       if(start > 0){
@@ -522,7 +856,7 @@ class StaffLogin extends React.PureComponent {
      ws.onopen = function (evt){
       console.log("Connection open SocketPaginationRequirement");
       var obj = {
-        Status : 0
+        "Status" : 0
         };
       ws.send(JSON.stringify(obj));
      }
@@ -531,7 +865,7 @@ class StaffLogin extends React.PureComponent {
       const valuesArray = JSON.parse(res.data);
       this.setState({
         ...this.state,
-        countPaginationRequirement : valuesArray.Count
+        countPaginationRequirement : valuesArray.Count,
       })
      };
      //Triggered when connection is closed
@@ -549,7 +883,7 @@ class StaffLogin extends React.PureComponent {
      ws.onopen = function (evt){
       console.log("Connection open SocketPaginationTodoList");
       var obj = {
-        Status : 0,
+        "Status" : 0,
         ProviderId : parseInt(localStorage.getItem("ProviderID"))
         };
         ws.send(JSON.stringify(obj));
@@ -576,7 +910,7 @@ class StaffLogin extends React.PureComponent {
      ws.onopen = function (evt){
       console.log("Connection open SocketPaginationHistory");
       var obj = {
-        Status : 1,
+        "Status" : 1,
         ProviderId : parseInt(localStorage.getItem("ProviderID"))
         };
         ws.send(JSON.stringify(obj));
@@ -765,33 +1099,35 @@ class StaffLogin extends React.PureComponent {
     var showPaginationHistory = []
     if(this.state.countPaginationRequirement !== null ){
       calPagination = Math.ceil(this.state.countPaginationRequirement/8)
-      for(var i = 2; i<= calPagination; i++){
+      var countBreak = 0
+      for(var i = this.state.startPagination; i<= calPagination; i++){
+        countBreak ++
         showPaginationRequirement.push(
-          <div className="requirement" key={i} onClick={this.handleOnclickPagination}>{i}</div>
+          <div className={ i === 1? "requirement active" : "requirement"} key={i}  onClick={this.handleOnclickPagination}>{i}</div>
         )
-        if(i === 6){
+        if(countBreak >=3){
           break
         }
       }
     }
     if(this.state.countPaginationTodoList !== null){
       calPagination = Math.ceil(this.state.countPaginationTodoList/8)
-      for( i = 2; i<= calPagination; i++){
+      for(  i = this.state.startPagination; i<= calPagination; i++){
         showPaginationTodoList.push(
-          <div className="todolist" key={i} onClick={this.handleOnclickPaginationToDoList}>{i}</div>
+          <div className={i === 1? "todolist active" : "todolist"} key={i} onClick={this.handleOnclickPaginationToDoList}>{i}</div>
         )
-        if(i === 6){
+        if(i === this.state.endPagination){
           break
         }
       }
     }
     if(this.state.countPaginationHistory !== null){
       calPagination = Math.ceil(this.state.countPaginationHistory/8)
-      for( i = 2; i<= calPagination; i++){
+      for( i = this.state.startPaginationHistory; i<= calPagination; i++){
         showPaginationHistory.push(
-          <div className="history" key={i} onClick={this.handleOnclickPaginationHistory}>{i}</div>
+          <div className={i === 1? "history active" : "history"} key={i} onClick={this.handleOnclickPaginationHistory}>{i}</div>
         )
-        if(i === 6){
+        if(i === this.state.endPaginationHistory){
           break
         }
       }
@@ -805,7 +1141,6 @@ class StaffLogin extends React.PureComponent {
             <div className="center">
               <div className="pagination">
                   <div onClick={()=> this.handleOnclickPrevious("Requirement")}>&laquo;</div>
-                  <div className="requirement active" onClick={this.handleOnclickPagination}>1</div>
                   {showPaginationRequirement}
                   <div onClick={()=> this.handleOnclickNext("Requirement")}>&raquo;</div>
               </div>
@@ -826,7 +1161,6 @@ class StaffLogin extends React.PureComponent {
         pagination1 = (
           <div className="pagination">
             <div onClick={()=> this.handleOnclickPrevious("TodoList")}>&laquo;</div>
-            <div className="todolist active" onClick={this.handleOnclickPaginationToDoList}>1</div>
             {showPaginationTodoList}
             <div onClick={()=> this.handleOnclickNext("TodoList")}>&raquo;</div>
           </div>
@@ -847,7 +1181,6 @@ class StaffLogin extends React.PureComponent {
       pagination2 = (
         <div className="pagination">
           <div onClick={()=> this.handleOnclickPrevious("History")}>&laquo;</div>
-          <div className="history active" onClick={this.handleOnclickPaginationHistory}>1</div>
           {showPaginationHistory}
           <div onClick={()=> this.handleOnclickNext("History")}>&raquo;</div>
         </div>
@@ -902,7 +1235,7 @@ class StaffLogin extends React.PureComponent {
                   <h2>Thực hiện công việc</h2>
                   <div className="table-job ">
                       <div className="wrapper-button-job">
-                        <div className="button-job" id="button-job1" onClick={ () => this.handleActive1()}>List nhận việc</div>
+                        <div className="button-job active-button" id="button-job1" onClick={ () => this.handleActive1()}>List nhận việc</div>
                         <div className="button-job" id="button-job2" onClick={ () => this.handleActive2()}>List công việc cần làm</div>
                       </div>
                       <div className="wrapper-tablejob">
