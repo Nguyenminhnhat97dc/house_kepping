@@ -543,28 +543,46 @@ class StaffLogin extends React.PureComponent {
     }) */
     const check = document.querySelector(".requirement.active")
     console.log(check)
-    check.className = "requirement"
+    if(check){
+      check.className = "requirement"
+    }
     event.target.className = "requirement active"
     const check1 = document.querySelectorAll(".pagination .requirement")
     console.log(">>>>>>>",check1)
     if(check1[0].className === "requirement active"){
       console.log("đã vô 4")
       console.log(check)
-      this.setState({
-        ...this.state,
-        currentPaginationRequirement : parseInt(event.target.textContent),
-        startPagination : this.state.startPagination - 1,
-        endPagination : this.state.endPagination - 1
-      },
-      function () { 
-        console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
-        const check2 = document.querySelectorAll(".pagination .requirement") 
-        console.log(check2)
-        if(check2[0].className === "requirement active"){
-          check2[0].classList.remove("active")
+      if(this.state.startPagination > 1){
+        this.setState({
+          ...this.state,
+          currentPaginationRequirement : parseInt(event.target.textContent),
+          startPagination : this.state.startPagination - 1,
+          endPagination : this.state.endPagination - 1
+        },
+        function () { 
+          console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
+          const check2 = document.querySelectorAll(".pagination .requirement") 
+          console.log(check2)
+          if(check2[0].className === "requirement active"){
+            check2[0].classList.remove("active")
+          }
         }
+        )
+      }else{
+        this.setState({
+          ...this.state,
+          currentPaginationRequirement : parseInt(event.target.textContent),
+        },
+        function () { 
+          console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
+          const check2 = document.querySelectorAll(".pagination .requirement") 
+          console.log(check2)
+          if(check2[0].className === "requirement active"){
+            check2[0].classList.remove("active")
+          }
+        }
+        )
       }
-      )
     }else{
       this.setState({
         ...this.state,
@@ -589,28 +607,46 @@ class StaffLogin extends React.PureComponent {
 
     const check = document.querySelector(".todolist.active")
     console.log(check)
-    check.className = "todolist"
+    if(check){
+      check.className = "todolist"
+    }
     event.target.className = "todolist active"
     const check1 = document.querySelectorAll(".pagination .todolist")
     console.log(">>>>>>>",check1)
     if(check1[0].className === "todolist active"){
       console.log("đã vô 4")
       console.log(check)
-      this.setState({
-        ...this.state,
-        currentPaginationTodoList : parseInt(event.target.textContent),
-        startPagination : this.state.startPagination - 1,
-        endPagination : this.state.endPagination - 1
-      },
-      function () { 
-        console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
-        const check2 = document.querySelectorAll(".pagination .todolist") 
-        console.log(check2)
-        if(check2[0].className === "todolist active"){
-          check2[0].classList.remove("active")
+      if(this.state.startPagination > 1){
+        this.setState({
+          ...this.state,
+          currentPaginationTodoList : parseInt(event.target.textContent),
+          startPagination : this.state.startPagination - 1,
+          endPagination : this.state.endPagination - 1
+        },
+        function () { 
+          console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
+          const check2 = document.querySelectorAll(".pagination .todolist") 
+          console.log(check2)
+          if(check2[0].className === "todolist active"){
+            check2[0].classList.remove("active")
+          }
         }
+        )
+      }else{
+        this.setState({
+          ...this.state,
+          currentPaginationTodoList : parseInt(event.target.textContent),
+        },
+        function () { 
+          console.log(this.state.startPaginationHistory,this.state.endPaginationHistory)
+          const check2 = document.querySelectorAll(".pagination .todolist") 
+          console.log(check2)
+          if(check2[0].className === "todolist active"){
+            check2[0].classList.remove("active")
+          }
+        }
+        )
       }
-      )
     }else{
       this.setState({
         ...this.state,
@@ -826,7 +862,7 @@ class StaffLogin extends React.PureComponent {
       }
       var end
       start === 0 ? end = 7 : end = start + 7
-
+      
       for (var i= start; i<= end ;i++ )
         if(valuesArray[i]){
           dataPagination.push(valuesArray[i])
