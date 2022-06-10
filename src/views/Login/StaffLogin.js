@@ -802,7 +802,7 @@ class StaffLogin extends React.PureComponent {
   }
 
   SocketHistoryList = () =>{
-    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/history")
+    var ws = new WebSocket("wss://secure-journey-86451.herokuapp.com/historyy")
     //var ws = new WebSocket("ws://localhost:8080/historyy")
     ws.addEventListener('error', function (event) {
       console.log('WebSocket error: ', event);
